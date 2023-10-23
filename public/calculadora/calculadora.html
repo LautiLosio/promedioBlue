@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Dolar</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="calculadora.css">
+</head>
+<body>
+  <div class="calculadora">
+    <h1>Calculadora</h1>
+    <section class="calculadora-form-container">
+      <div id="dolaresSelect">
+        <p>U$D</p>
+        <select name="dolares" id="dolarType">
+          <option value="oficial">Oficial</option>
+          <option value="blue" selected>Blue</option>
+          <option value="bolsa">Bolsa</option>
+          <option value="contadoconliqui">Contado con liqui</option>
+          <option value="solidario">Solidario</option>
+          <option value="mayorista">Mayorista</option>
+        </select>
+        <div id="tipo-precio" class="flex-column clickable">
+          <p>CMP</p>
+          <p class="active">PRM</p>
+          <p>VTA</p>
+        </div>
+      </div>
+      <!-- <input type='number' 
+           inputMode='decimal'
+           placeholder='Type a number and blur' 
+           onFocus="this.type='number'; this.value=this.lastValue" 
+           onBlur="this.type=''; this.lastValue=this.value; this.value=this.value==''?'':(+this.value).toLocaleString()"> -->
+      <input 
+        id="dolarInput" name="dolares"
+        inputmode="numeric"
+        placeholder="USD">
+      <p>&DownArrow;</p>
+      <p>ARS</p>
+      <input  
+        id="pesoInput" name="pesos" 
+        inputmode="numeric"
+        placeholder="ARS">
+    </section>
+
+    <!-- volver atras -->
+    <div class="volver">
+      <button onclick="window.history.back()" class="btn">
+        💸 Volver
+      </button>
+    </div>
+  </div>
+
+  <script src="calculadora.js"></script>
+  
+</body>
+</html>

@@ -1,0 +1,247 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* custom scroll bar */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(96, 40%, 17%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(77, 33%, 53%);
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #675;
+}
+
+body {
+  background-color: #3e6029;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 1rem;
+  background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><text y=%22.9em%22 font-size=%22100%22 opacity=%220.1%22>💸</text></svg>");
+  background-size: 200px 200px;
+  background-position: center;
+  animation: bgPan 10s linear infinite;
+}
+
+@keyframes bgPan {
+  0% {
+    background-position: 0px 200px;
+  }
+
+  100% {
+    background-position: 200px 0px;
+  }
+}
+
+.container {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 1rem;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  color: hsl(97, 50%, 87%);
+}
+
+.title h1 {
+  font-size: 2.5rem;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cv {
+  color: hsl(97, 20%, 67%);
+}
+
+.cv h2 {
+  font-size: 2rem;
+  cursor: copy;
+}
+
+.hoy h2 {
+  text-shadow: 0 2px 2px #00000050, 0 0 10px #00000020;
+  font-size: 4rem;
+  cursor: copy;
+}
+
+.hoy h3 {
+  font-size: 2rem;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: hsl(97, 20%, 67%);
+  animation: bob 2s infinite ease-in-out;
+  user-select: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: 2px solid hsl(97, 20%, 67%);
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  opacity: 0.5;
+}
+
+@keyframes bob {
+  0% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+.mas-cotizaciones { 
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(97, 50%, 87%);
+  color: #40612a;
+  font-weight: bold;
+  border: none;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: hsl(97, 50%, 77%);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  color: hsl(97, 20%, 67%);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.footer a {
+  color: hsl(97, 20%, 67%);
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.buttons {
+  display: grid;
+  grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 1rem;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.date {
+  font-size: 1rem;
+  color: hsl(97, 20%, 67%);
+}
+
+#reload {
+  transform: rotate(90deg);
+}
+
+input {
+  border: none;
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: hsl(97, 50%, 87%);
+  color: #40612a;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+@media screen and (min-width: 850px) {
+
+  body {
+    background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 300%22><text y=%22.9em%22 font-size=%22100%22 opacity=%220.1%22>💸</text></svg>");
+    background-size: 200px 200px;
+    background-position: center;
+    animation: bgPan 10s linear infinite;
+  }
+
+  .container {
+    height: 100vh;
+    grid-template-rows: repeat(6, 1fr);
+  }
+
+  .title h1 {
+    font-size: 3rem;
+  }
+
+  .cv h2 {
+    font-size: 3rem;
+  }
+
+  .hoy h2 {
+    font-size: 6rem;
+  }
+
+  .hoy h3 {
+    font-size: 3rem;
+  }
+
+  .mas-cotizaciones {
+    height: 95vh;
+  }
+
+}
