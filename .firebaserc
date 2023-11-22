@@ -1,9 +1,5 @@
 {
   "projects": {
     "default": "promedioblue"
-  },
-  "hosting": {
-    "site": "dolarhistoryservice",
-    "public": "public"
   }
 }
