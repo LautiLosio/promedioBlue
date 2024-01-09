@@ -30,8 +30,8 @@ function processData(data) {
 
     let li = createCotizacionElement(item.nombre, item.casa);
     let textContainer = createTextContainerElement();
-    let compraText = createCompraVentaElement("compra", item.compra);
-    let ventaText = createCompraVentaElement("venta", item.venta);
+    let compraText = createCompraVentaElement("compra", item.compra, item.casa);
+    let ventaText = createCompraVentaElement("venta", item.venta, item.casa);
     let valueContainer = createValueContainerElement();
     let value = createValueElement(item.promedio);
 
@@ -54,8 +54,9 @@ function createCotizacionElement(nombre, casa) {
     "blue": "💸",
     "bolsa": "📈",
     "contadoconliqui": "🇺🇲",
-    "solidario": "💳️",
-    "mayorista": "💰️"
+    "tarjeta": "💳️",
+    "mayorista": "💰️",
+    "cripto": "🪙"
   }
 
   let li = document.createElement("li");
@@ -65,8 +66,12 @@ function createCotizacionElement(nombre, casa) {
   let name = document.createElement("h2");
   name.innerHTML = `${emojis[casa]} ${nombre}`;
 
+  // special cases
   if (casa == "contadoconliqui") {
     name.innerHTML = `${emojis[casa]} Dolar CCL`;
+  }
+  if (casa == "bolsa") {
+    name.innerHTML = `${emojis[casa]} Bolsa (MEP)`;
   }
 
   li.appendChild(name);
@@ -81,15 +86,15 @@ function createTextContainerElement() {
   return textContainer;
 }
 
-function createCompraVentaElement(id, value) {
+function createCompraVentaElement(displayText, value, casa) {
   if (!value) {
     value = "No disponible";
   }
 
   let element = document.createElement("h2");
-  element.innerHTML = `${id.charAt(0).toUpperCase() + id.slice(1)}: ${value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || value}`;
+  element.innerHTML = `${displayText.charAt(0).toUpperCase() + displayText.slice(1)}: ${value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || value}`;
   element.classList.add("compra-venta");
-  element.id = id;
+  element.id = `${displayText}-${casa}`;
 
   return element;
 }
@@ -103,7 +108,7 @@ function createValueContainerElement() {
 
 function createValueElement(value) {
   let element = document.createElement("h3");
-  element.innerHTML = value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
+  element.innerHTML = `$ ${value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}`
 
   return element;
 }
