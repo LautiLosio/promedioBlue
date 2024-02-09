@@ -10,6 +10,17 @@ let tipoPrecio = "promedio";
 
 // Carga de cotizaciones y seleccion de dolar
 getCotizaciones().then(() => {
+
+  // Carga de opciones de dolar
+  cotizaciones.forEach(item => {
+    let option = document.createElement("option");
+    option.value = item.casa;
+    option.textContent = item.casa.slice(0, 1).toUpperCase() + item.casa.slice(1);
+    option.selected = item.casa == "blue" ? true : false;
+    dolarType.appendChild(option);
+  });
+
+
   selectedDolarValue = cotizaciones.find(item => item.casa == dolarType.value);
 });
 

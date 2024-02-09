@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historico Dolar</title>
+    <link rel="stylesheet" href="historico.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">  
+
+  </head>
+  <body>
+
+    <center>
+      <div id="dolar-form">
+
+        <h2 class="title">Elije el tipo de dolar y la fecha</h2>
+        <div class="spacer-4"></div>
+
+        <span id="preciosContainer">
+          <div class="precio-container smaller-precio">
+            <h3>Compra</h3>
+            <h2 id="precioCompra">---</h2>
+          </div>
+          <div class="precio-container">
+            <h3>Promedio</h3>
+            <h2 id="precioPromedio">---</h2>
+          </div>
+          <div class="precio-container smaller-precio">
+            <h3>Venta</h3>
+            <h2 id="precioVenta">---</h2>
+          </div>
+        </span>
+  
+        <div class="spacer-4"></div>
+
+        <form id="dateForm" action="#">
+          <select name="dolares" id="dolarType">
+          </select>
+          <div id="dateContainer">
+            <input type="text" id="dateInput" name="date" required disabled placeholder="Fecha">
+          </div>
+          <input type="submit" value="Buscar" class="btn btn-primary" id="submitButton" disabled>
+        </form>
+      </div>
+
+      <div class="spacer-4"></div>
+
+      
+      <div id="chartContainer" class="hidden">
+        <div id="chart"></div>
+      </div>
+
+      <div class="spacer-4"></div>
+
+      <div class="volver">
+        <button onclick="window.history.back()" class="btn">
+          💸 Volver
+        </button>
+      </div>
+      
+    </center>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="historico.js"></script>
+  </body>
+</html>
