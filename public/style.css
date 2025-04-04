@@ -65,7 +65,7 @@ body::before {
     background-position: 0 0;
   }
   100% {
-    background-position: 200px -250px;
+    background-position: 200px -200px;
   }
 }
 
