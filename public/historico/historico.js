@@ -1,377 +1,397 @@
-// Parámetros
-// Path Parameters
-// casa
-// *
-// Casa de cambio
-// Type
-// string
-// Requerido
-// Enum
-// oficial, blue, bolsa, mayorista, solidario, turista
-// Respuesta
-// 200
-// Devuelve una lista de cotizaciones del dólar
-// Content-Type:
-// application/json
-// array of:
-// moneda
-// string
-// casa
-// string
-// fecha
-// string
-// compra
-// number
-// venta
-// number
-// [
-//   {
-//     "moneda": "string",
-//     "casa": "string",
-//     "fecha": "string",
-//     "compra": "number",
-//     "venta": "number"
-//   }
-// ]
-// GET
-// /v1/cotizaciones/dolares/{casa}
-// Variables
-// KEY
-// VALUE
-// casa
-// *
-// blue
-// curl -X GET \
-//  https://api.argentinadatos.com/v1/cotizaciones/dolares/blue
-
-// Import the necessary libraries
-// Fetch the data from the API
-
 // Dom elements
 const chartElement = document.getElementById('chart');
 const chartContainer = document.getElementById('chartContainer');
 const dateForm = document.getElementById('dateForm');
 const dolarType = document.getElementById('dolarType');
-const dateContainer = document.getElementById('dateContainer');
 const dateInput = document.getElementById('dateInput');
+const rangeInput = document.getElementById('rangeInput');
 const submitButton = document.getElementById('submitButton');
 const preciosContainer = document.getElementById('preciosContainer');
 const precioCompra = document.getElementById('precioCompra');
 const precioPromedio = document.getElementById('precioPromedio');
 const precioVenta = document.getElementById('precioVenta');
-
+const statsContainer = document.getElementById('statsContainer');
+const toggleChartType = document.getElementById('toggleChartType');
+const downloadData = document.getElementById('downloadData');
 
 // Variables
 let cotizaciones = [];
 let selectedCasa = 'blue';
+let chart = null;
+let isLineChart = true;
+const API_BASE_URL = 'https://dolarapi.com/v1';
+const ARGENTINA_DATOS_API = 'https://api.argentinadatos.com/v1';
 
+// Scroll behavior for back button
+let lastScrollTop = 0;
+let scrollTimeout;
+const volverButton = document.querySelector('.historico-back-button');
+const SCROLL_THRESHOLD = 200; // Show button after scrolling this many pixels
+const SCROLL_TIMEOUT = 1500; // Hide button after this many milliseconds of no scrolling
+
+// Keep track of currently displayed data
+let currentDisplayData = [];
+
+// Initialize chart
+function initChart() {
+  if (!chart) {
+    chart = echarts.init(chartElement);
+    window.addEventListener('resize', () => chart.resize());
+  }
+}
+
+// Format currency
+function formatCurrency(value) {
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'ARS'
+  }).format(value);
+}
+
+// Format date
+function formatDate(date) {
+  return new Intl.DateTimeFormat('es-AR', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(new Date(date));
+}
+
+// Calculate statistics
+function calculateStats(data) {
+  const prices = data.map(d => d.venta);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+  const change = ((prices[prices.length - 1] - prices[0]) / prices[0]) * 100;
+
+  document.getElementById('min-price').textContent = formatCurrency(min);
+  document.getElementById('max-price').textContent = formatCurrency(max);
+  document.getElementById('avg-price').textContent = formatCurrency(avg);
+  document.getElementById('price-change').textContent = `${change.toFixed(2)}%`;
+}
+
+// Create chart
+function createChart(data) {
+  initChart();
+  
+  const dates = data.map(d => formatDate(d.fecha));
+  const compra = data.map(d => d.compra);
+  const venta = data.map(d => d.venta);
+  
+  const option = {
+    tooltip: {
+      trigger: 'axis',
+      formatter: function(params) {
+        const date = params[0].name;
+        return `${date}<br/>
+          Compra: ${formatCurrency(params[0].value)}<br/>
+          Venta: ${formatCurrency(params[1].value)}`;
+      }
+    },
+    legend: {
+      data: ['Compra', 'Venta'],
+      textStyle: {
+        color: 'hsl(97, 50%, 87%)'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: dates,
+      axisLabel: {
+        rotate: 45,
+        color: 'hsl(97, 50%, 87%)'
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'hsl(97, 50%, 87%)'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        formatter: formatCurrency,
+        color: 'hsl(97, 50%, 87%)'
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'hsl(97, 50%, 87%)'
+        }
+      },
+      splitLine: {
+        lineStyle: {
+          color: 'hsla(97, 50%, 87%, 0.1)'
+        }
+      }
+    },
+    series: [
+      {
+        name: 'Compra',
+        data: compra,
+        type: isLineChart ? 'line' : 'bar',
+        smooth: isLineChart,
+        itemStyle: {
+          color: '#88bd66'
+        },
+        areaStyle: isLineChart ? {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(136, 189, 102, 0.3)' },
+            { offset: 1, color: 'rgba(136, 189, 102, 0.1)' }
+          ])
+        } : undefined
+      },
+      {
+        name: 'Venta',
+        data: venta,
+        type: isLineChart ? 'line' : 'bar',
+        smooth: isLineChart,
+        itemStyle: {
+          color: '#3e6029'
+        },
+        areaStyle: isLineChart ? {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(62, 96, 41, 0.3)' },
+            { offset: 1, color: 'rgba(62, 96, 41, 0.1)' }
+          ])
+        } : undefined
+      }
+    ]
+  };
+
+  chart.setOption(option);
+}
+
+// Download data as CSV
+function downloadCSV(data) {
+  const headers = ['Fecha', 'Compra', 'Venta', 'Promedio'];
+  const csvContent = [
+    headers.join(','),
+    ...data.map(d => [
+      d.fecha,
+      d.compra,
+      d.venta,
+      (d.compra + d.venta) / 2
+    ].join(','))
+  ].join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `dolar-${selectedCasa}-${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+}
+
+// Fetch current data from API
+async function fetchCurrentData(casa) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/dolares/${casa}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching current data:', error);
+    return null;
+  }
+}
+
+// Fetch historical data from API
+async function fetchHistoricalData(casa) {
+  try {
+    const response = await fetch(`${ARGENTINA_DATOS_API}/cotizaciones/dolares/${casa}`);
+    const data = await response.json();
+    return data.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+  } catch (error) {
+    console.error('Error fetching historical data:', error);
+    return [];
+  }
+}
+
+// Update UI with data
+function updateUI(data) {
+  if (data.length === 0) return;
+
+  currentDisplayData = data; // Store current data
+  const latest = data[data.length - 1];
+  precioCompra.textContent = formatCurrency(latest.compra);
+  precioPromedio.textContent = formatCurrency((latest.compra + latest.venta) / 2);
+  precioVenta.textContent = formatCurrency(latest.venta);
+
+  chartContainer.classList.remove('hidden');
+  statsContainer.classList.remove('hidden');
+  createChart(data);
+  calculateStats(data);
+}
+
+// Filter data by date range
+function filterDataByRange(data, range, referenceDate = new Date()) {
+  const endDate = referenceDate;
+  const startDate = new Date(referenceDate);
+  startDate.setDate(startDate.getDate() - range);
+  
+  return data.filter(d => {
+    const date = new Date(d.fecha);
+    return date >= startDate && date <= endDate;
+  });
+}
 
 // Event listeners
 dolarType.addEventListener('change', async function() {
   selectedCasa = dolarType.value;
+  if (!selectedCasa) return;
   
-  // disable the date input, set the placeholder to 'Cargando...', and the type to text
   dateInput.disabled = true;
   dateInput.value = '';
   dateInput.type = 'text';
   dateInput.placeholder = 'Cargando...';
 
-  // fetch the data from the API
-  await fetchByHouse(selectedCasa).then(data => {
-    // get the oldest and newest date from the data
-    const oldestDate = new Date(data[0].fecha)
-    const newestDate = new Date(data[data.length - 1].fecha)
+  const data = await fetchHistoricalData(selectedCasa);
+  if (data.length > 0) {
+    cotizaciones = data;
+    const oldestDate = new Date(data[0].fecha);
+    const newestDate = new Date(data[data.length - 1].fecha);
 
-    // set the input type to date
     dateInput.type = 'date';
-
-    // set the date range for the date input
     dateInput.min = oldestDate.toISOString().split('T')[0];
     dateInput.max = newestDate.toISOString().split('T')[0];
-
-    // enable the date input
     dateInput.disabled = false;
-  });
-  
-});
 
-dateInput.addEventListener('change', async function() {
-  if (dateInput.value) {
-    submitButton.disabled = false;
-  } else {
-    submitButton.disabled = true;
+    // Update UI with last month's data by default
+    const filteredData = filterDataByRange(data, 30);
+    updateUI(filteredData);
   }
 });
 
-dateForm.addEventListener('submit', async function(event) {
-  event.preventDefault();
-
-  const date = dateInput.value;
-
-  // fetch the data from the API
-  await fetchByHouseAndDate(selectedCasa, date).then(data => {
-
-
-    // get the average price
-    const averagePrice = (data.compra + data.venta) / 2;
-
-    // set the prices
-    precioCompra.textContent = data.compra.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
-    precioVenta.textContent = data.venta.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
-    precioPromedio.textContent = averagePrice.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
-
-    // create the chart
-    createChart(data);
-
-  });
-
+dateInput.addEventListener('change', function() {
+  submitButton.disabled = !dateInput.value;
 });
 
-
-submitButton.addEventListener('click', function() {
-  // preciosContainer.classList.toggle('hidden');
+// Separate range input handler
+rangeInput.addEventListener('change', function() {
+  if (!selectedCasa) return;
+  
+  const range = parseInt(rangeInput.value);
+  const referenceDate = dateInput.value ? new Date(dateInput.value) : new Date();
+  const filteredData = filterDataByRange(cotizaciones, range, referenceDate);
+  updateUI(filteredData);
 });
 
-// Functions
-
-/**
- * Retrieves the cotizaciones from the specified API endpoint.
- * @returns {Promise<Array>} Array of objects with the cotizaciones
- * @example
- * [
- *  {
- *   "moneda": "USD",
- *   "casa": "oficial",
- *   "nombre": "Oficial",
- *   "compra": 810,
- *   "venta": 850,
- *   "fechaActualizacion": "2024-02-09T16:04:00.000Z"
- *  }
- * ]
- */
-async function getCotizaciones() {
-  let response = await fetch("https://dolarapi.com/v1/dolares");
-  let data = await response.json();
+// Update form submit to not handle range
+dateForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
   
-  return data;
-}
-
-/**
- * Fetch the cotizaciones from the specified casa.
- * @param {string} casa - The casa to fetch the cotizaciones from.
- * @returns {Promise<Array>} Array of objects with historical cotizaciones
- * @example
- * [
- *  {
- *   "casa": "blue",
- *   "compra": 4,
- *   "venta": 4,
- *   "fecha": "2011-01-03"
- *  }
- * ]
- */
-async function fetchByHouse(casa) {
-  let response = await fetch(`https://api.argentinadatos.com/v1/cotizaciones/dolares/${casa}/`);
-  let data = await response.json();
+  if (!dateInput.value) return;
   
-  return data;
-}
-
-/**
- * Fetch the cotizaciones from the specified casa and date.
- * @param {string} casa - The casa to fetch the cotizaciones from.
- * @param {string} date - The format of the date is 'YYYY-MM-DD'.
- * @returns {Promise<Object>} Array of objects with historical cotizaciones
- * @example
- * {
- *  "casa": "blue",
- *  "compra": 4,
- *  "venta": 4,
- *  "fecha": "2011-01-03"
- * }
- */
-async function fetchByHouseAndDate(casa, date) {
-
-  //curl -X GET \
-  //https://api.argentinadatos.com/v1/cotizaciones/dolares/blue/2024/01/01
-
-  let response = await fetch(`https://api.argentinadatos.com/v1/cotizaciones/dolares/${casa}/${date.slice(0, 4)}/${date.slice(5, 7)}/${date.slice(8, 10)}/`);
+  const selectedDate = new Date(dateInput.value);
+  const range = parseInt(rangeInput.value);
+  const startDate = new Date(selectedDate);
+  startDate.setDate(startDate.getDate() - range);
   
-  let data = await response.json();
-
-  return data;
-}
-
-/**
- * Create a chart with the historical cotizaciones.
- */
-async function createChart() {
-  console.log('Creating chart...');
-
-  // fetch the data from the API
-  const data = await fetchByHouse(selectedCasa);
-
-  // Get the dates and average values
-  const dates = data.map(cotizacion => cotizacion.fecha.toLocaleString('es-AR', { year: 'numeric', month: 'short', day: 'numeric' }));
-  const averageValues = data.map(cotizacion => (cotizacion.compra + cotizacion.venta) / 2);
-  
-  // Remove the hidden class from the chart
-  chartContainer.classList.remove('hidden');
-
-  // Create the chart
-
-  // Initialize the chart
-  const chart = echarts.init(chartElement, null, { useCoarsePointer: true, pointerSize: 10 });
-
-  // Set the chart options
-  const options = {
-    // Set the title of the chart
-    title: {
-      text: `Precio historico del dólar ${data[0].casa}`,
-      left: 'center',
-      textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontFamily: 'Space Grotesk',
-        fontSize: 20,
-      },
-    },
-
-    xAxis: {
-      type: 'category',
-      data: dates,
-      axisPointer: {
-        type: 'shadow',
-      },
-      axisLabel: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontFamily: 'Space Grotesk',
-        fontSize: 16,
-      },
-      axisLine: {
-        lineStyle: {
-          color: 'white', // Set the color of the x-axis baseline
-        },
-      },
-      splitLine: { // Add subtle reference lines
-        show: true,
-        lineStyle: {
-          color: 'rgba(255, 255, 255, 0.1)', // Set the color of the reference lines
-        },
-      },
-    },
-
-    yAxis: {
-      type: 'value',
-      axisLabel: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontFamily: 'Space Grotesk',
-        fontSize: 16,
-      },
-    },
-
-    tooltip: { // Add tooltip on hover
-      trigger: 'axis',
-      formatter: '{b0}<br/>${c0}',
-      textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontFamily: 'Space Grotesk',
-      },
-      backgroundColor: 'rgba(0, 0, 0, 0.7)', // Set the background color of the tooltip
-      borderColor: 'white', // Set the border color of the tooltip
-
-    },
-
-    series: [{
-      type: 'line',
-      data: averageValues,
-      smooth: true, // Make the line smooth
-      lineStyle: {
-        color: '#3e6029', // Set the color of the line
-      },
-      areaStyle: {
-        color: '#3e6029', // Set the color of the area under the line
-      },
-      showSymbol: false, // Hide the symbols at data points
-    }],
-
-    dataZoom: [
-      {
-        type: 'slider', // Add the datazoom slider
-        start: 100 - Math.min(100, Math.floor((365 / dates.length) * 100)), // Set the default zoom to the last year
-        end: 100,
-        textStyle: {
-          color: 'white',
-          fontWeight: 'bold',
-          fontFamily: 'Space Grotesk',
-        },
-      },
-      {
-        type: 'inside', // Enable zooming and panning with mouse or touch
-        start: 0,
-        end: 100,
-      },
-    ],
-  };
-
-  // Set the chart options and render the chart
-  chart.setOption(options);
-
-  
-  // Make the chart responsive
-  window.addEventListener('resize', () => {
-    chart.resize();
+  const filteredData = cotizaciones.filter(d => {
+    const date = new Date(d.fecha);
+    return date >= startDate && date <= selectedDate;
   });
+  
+  updateUI(filteredData);
+});
+
+// Update toggle chart to use current data
+toggleChartType.addEventListener('click', function() {
+  isLineChart = !isLineChart;
+  if (chart && currentDisplayData.length > 0) {
+    createChart(currentDisplayData);
+  }
+});
+
+downloadData.addEventListener('click', function() {
+  if (cotizaciones.length > 0) {
+    downloadCSV(cotizaciones);
+  }
+});
+
+// Scroll behavior for back button
+function handleScroll() {
+  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+  
+  // Show button if no scroll available or at top/bottom
+  if (documentHeight <= windowHeight || currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10) {
+    volverButton.classList.add('visible');
+    return;
+  }
+
+  // Handle scroll direction for rest of page
+  if (currentScroll < lastScrollTop) {
+    // Scrolling up
+    volverButton.classList.add('visible');
+  } else {
+    // Scrolling down
+    volverButton.classList.remove('visible');
+  }
+  
+  lastScrollTop = currentScroll;
 }
 
-/**
- * Create the options for the select element
- * @param {Array} cotizaciones - Array of objects with the cotizaciones
- * @example
- * [
- *  {
- *   "moneda": "USD",
- *   "casa": "oficial",
- *   "nombre": "Oficial",
- *   "compra": 810,
- *   "venta": 850,
- *   "fechaActualizacion": "2024-02-09T16:04:00.000Z"
- *  }
- * ]
- */
-function createInputOptions(cotizaciones) {
-  // Create an unselectable option for placeholder text
-  const placeholderOption = document.createElement('option');
-  placeholderOption.value = '';
-  placeholderOption.textContent = 'Seleccione una cotización';
-  placeholderOption.disabled = true;
-  placeholderOption.selected = true;
-  dolarType.appendChild(placeholderOption);
+// Add scroll and resize listeners
+window.addEventListener('scroll', handleScroll, { passive: true });
+window.addEventListener('resize', handleScroll, { passive: true });
 
-  // Dynamically create the options for the select element
-  cotizaciones.forEach(cotizacion => {
-    const option = document.createElement('option');
-    option.value = cotizacion.casa;
-    option.textContent = cotizacion.nombre;
-    dolarType.appendChild(option);
-  });
-}
+// Initial check for button visibility
+handleScroll();
 
-// --------------------------
+// Show button on mouse movement near bottom
+document.addEventListener('mousemove', (e) => {
+  const bottomThreshold = window.innerHeight - 100;
+  if (e.clientY > bottomThreshold && window.pageYOffset > SCROLL_THRESHOLD) {
+    volverButton.classList.add('visible');
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      volverButton.classList.remove('visible');
+    }, SCROLL_TIMEOUT);
+  }
+});
 
-// Main function
+// Initialize
 async function main() {
-
-  // Fetch the cotizaciones from the API and create the input options
-  cotizaciones = await getCotizaciones()
-  createInputOptions(cotizaciones);
-
+  // Set up dolar types
+  const casas = ['blue', 'oficial', 'bolsa', 'mayorista', 'solidario', 'turista'];
+  const options = casas.map(casa => {
+    const name = casa.charAt(0).toUpperCase() + casa.slice(1);
+    return `<option value="${casa}">Dólar ${name}</option>`;
+  });
+  
+  dolarType.innerHTML = options.join('');
+  
+  // Set default range to 1 month
+  rangeInput.value = '30';
+  
+  // Set initial data for blue dollar
+  selectedCasa = 'blue';
+  dolarType.value = selectedCasa;
+  
+  // Show button initially
+  volverButton.classList.add('visible');
+  
+  const data = await fetchHistoricalData(selectedCasa);
+  if (data.length > 0) {
+    cotizaciones = data;
+    const filteredData = filterDataByRange(data, 30);
+    updateUI(filteredData);
+    
+    const oldestDate = new Date(data[0].fecha);
+    const newestDate = new Date(data[data.length - 1].fecha);
+    
+    dateInput.type = 'date';
+    dateInput.min = oldestDate.toISOString().split('T')[0];
+    dateInput.max = newestDate.toISOString().split('T')[0];
+    dateInput.disabled = false;
+  }
 }
-
-
-// Run the main function
 
 main();

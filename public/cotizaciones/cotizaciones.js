@@ -1,24 +1,107 @@
 let lista = document.getElementById("lista");
-let placehoders = document.querySelectorAll("#placeholder");
+let placeholders = []; // Will store placeholder elements
 
 let cotizaciones = [];
 
-async function getCotizaciones() {
-  const response = await fetch("https://dolarapi.com/v1/dolares");
-  const data = await response.json();
-  
-  setTimeout(() => {
-    placehoders.forEach(placeholder => {
-      placeholder ? placeholder.remove() : null;
-    });
-    processData(data);
-  }, 500);
+// Scroll behavior for back button
+let lastScrollTop = 0;
+let scrollTimeout;
+const volverButton = document.querySelector('.volver');
+const SCROLL_THRESHOLD = 200; // Show button after scrolling this many pixels
+const SCROLL_TIMEOUT = 1500; // Hide button after this many milliseconds of no scrolling
 
+function createPlaceholders() {
+  placeholders = []; // Clear any existing placeholders
+  for (let i = 0; i < 9; i++) {
+    const li = document.createElement("li");
+    li.classList.add("cotizacion");
+    li.id = "placeholder";
+
+    const h2 = document.createElement("h2");
+    h2.classList.add("placeholder");
+    h2.textContent = "Actualizando cotizaciones...";
+
+    const textContainer = document.createElement("div");
+    textContainer.classList.add("text-container");
+
+    const compraText = document.createElement("h2");
+    compraText.classList.add("compra-venta", "placeholder");
+    compraText.textContent = "Compra";
+
+    const valueContainer = document.createElement("div");
+    valueContainer.classList.add("value-container", "placeholder");
+    const h3 = document.createElement("h3");
+    h3.textContent = "Consultando...";
+    valueContainer.appendChild(h3);
+
+    const ventaText = document.createElement("h2");
+    ventaText.classList.add("compra-venta", "placeholder");
+    ventaText.textContent = "Venta";
+
+    textContainer.appendChild(compraText);
+    textContainer.appendChild(valueContainer);
+    textContainer.appendChild(ventaText);
+
+    li.appendChild(h2);
+    li.appendChild(textContainer);
+    lista.appendChild(li);
+    placeholders.push(li); // Store the placeholder element
+  }
+}
+
+async function getCotizaciones() {
+  createPlaceholders();
+  
+  const [dolarResponse, euroResponse, realResponse] = await Promise.all([
+    fetch("https://dolarapi.com/v1/dolares"),
+    fetch("https://dolarapi.com/v1/cotizaciones/eur"),
+    fetch("https://dolarapi.com/v1/cotizaciones/brl")
+  ]);
+  
+  const [dolarData, euroData, realData] = await Promise.all([
+    dolarResponse.json(),
+    euroResponse.json(),
+    realResponse.json()
+  ]);
+  
+  // Remove all placeholders
+  placeholders.forEach(placeholder => {
+    placeholder.remove();
+  });
+  placeholders = []; // Clear the array
+  
+  // Combine all data into a single array
+  const allData = [...dolarData, euroData, realData];
+  processData(allData);
 }
 
 function processData(data) {
-  data.forEach(item => {
+  // Sort the data array to ensure Euro and Real appear after oficial and blue
+  data.sort((a, b) => {
+    // Define the desired order
+    const order = {
+      "oficial": 0,
+      "blue": 1,
+      "EUR": 2,
+      "BRL": 3
+    };
+    
+    // For dollar types, use casa for ordering
+    if (a.moneda === "USD" && b.moneda === "USD") {
+      return order[a.casa] - order[b.casa];
+    }
+    // For Euro and Real, use moneda for ordering
+    if (order[a.moneda] !== undefined && order[b.moneda] !== undefined) {
+      return order[a.moneda] - order[b.moneda];
+    }
+    // If only one item is in the order object, it should come first
+    if (order[a.moneda] !== undefined) return -1;
+    if (order[b.moneda] !== undefined) return 1;
+    // For other items, maintain their original order
+    return 0;
+  });
 
+  data.forEach(item => {
     item.promedio = ((item.compra + item.venta) / 2).toFixed(2);
 
     if (!item.compra) {
@@ -27,8 +110,7 @@ function processData(data) {
       item.promedio = item.compra;
     }
 
-
-    let li = createCotizacionElement(item.nombre, item.casa);
+    let li = createCotizacionElement(item.nombre, item.casa, item.moneda);
     let textContainer = createTextContainerElement();
     let compraText = createCompraVentaElement("compra", item.compra, item.casa);
     let ventaText = createCompraVentaElement("venta", item.venta, item.casa);
@@ -48,7 +130,7 @@ function processData(data) {
   });
 }
 
-function createCotizacionElement(nombre, casa) {
+function createCotizacionElement(nombre, casa, moneda) {
   let emojis = {
     "oficial": "💵",
     "blue": "💸",
@@ -56,7 +138,9 @@ function createCotizacionElement(nombre, casa) {
     "contadoconliqui": "🇺🇲",
     "tarjeta": "💳️",
     "mayorista": "💰️",
-    "cripto": "🪙"
+    "cripto": "🪙",
+    "EUR": "💶",
+    "BRL": "🇧🇷"
   }
 
   let li = document.createElement("li");
@@ -72,6 +156,12 @@ function createCotizacionElement(nombre, casa) {
   }
   if (casa == "bolsa") {
     name.innerHTML = `${emojis[casa]} Bolsa (MEP)`;
+  }
+  if (casa == "oficial" && moneda == "EUR") {
+    name.innerHTML = `${emojis["EUR"]} Euro`;
+  }
+  if (casa == "oficial" && moneda == "BRL") {
+    name.innerHTML = `${emojis["BRL"]} Real Brasileño`;
   }
 
   li.appendChild(name);
@@ -127,5 +217,47 @@ function addClickEventListener(li, compraText, ventaText) {
     ventaText.classList.toggle("show");
   });
 }
+
+function handleScroll() {
+  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+  
+  // Show button if no scroll available or at top/bottom
+  if (documentHeight <= windowHeight || currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10) {
+    volverButton.classList.add('visible');
+    return;
+  }
+
+  // Handle scroll direction for rest of page
+  if (currentScroll < lastScrollTop) {
+    // Scrolling up
+    volverButton.classList.add('visible');
+  } else {
+    // Scrolling down
+    volverButton.classList.remove('visible');
+  }
+  
+  lastScrollTop = currentScroll;
+}
+
+// Add scroll and resize listeners
+window.addEventListener('scroll', handleScroll, { passive: true });
+window.addEventListener('resize', handleScroll, { passive: true });
+
+// Initial check for button visibility
+handleScroll();
+
+// Show button on mouse movement near bottom
+document.addEventListener('mousemove', (e) => {
+  const bottomThreshold = window.innerHeight - 100;
+  if (e.clientY > bottomThreshold && window.pageYOffset > SCROLL_THRESHOLD) {
+    volverButton.classList.add('visible');
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      volverButton.classList.remove('visible');
+    }, SCROLL_TIMEOUT);
+  }
+});
 
 getCotizaciones();

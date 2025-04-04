@@ -1,56 +1,281 @@
-.calculadora { 
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  height: 100%;
-}
+@import url("../utilities.css");
 
-.calculadora-form-container {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-#dolaresSelect { 
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-select {
+.calculator-page {
   width: 100%;
-  height: 100%;
-  padding: 0.5rem;
-  border: 2px solid hsl(97, 50%, 77%);
-  background-color: hsl(97, 40%, 37%);
+  margin: 0 auto;
+  padding: 2rem;
+  padding-bottom: calc(100px + 4rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.calculator-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+@media (min-width: 769px) {
+  .calculator-layout {
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .calculator-section {
+    flex: 1;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calculator-page {
+    padding: 1rem;
+  }
+
+  .calculator-section {
+    padding: 1.25rem;
+  }
+}
+
+.page-title {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 2rem;
+}
+
+.calculator-section {
+  background: var(--primary-color-light);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--primary-color-dark);
+  border-radius: 15px;
+  padding: 1.5rem;
+  position: relative;
+  width: 100%;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.input-group-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
+}
+
+.form-control {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-color-light);
+  border: 1px solid var(--primary-color-dark);
   color: white;
-  border-radius: 0.5rem;
+  border-radius: 10px;
+  font-size: 2rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.form-control-numeric {
+  text-align: right;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color-medium-light);
+  font-size: 1.5rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.form-control-select {
+  font-size: 1.2rem;
+  padding: 0.8rem 1rem;
+  padding-right: 3rem;
+}
+
+.form-control-select option {
+  background-color: var(--bg-color);
+  color: white;
+}
+
+.form-control::placeholder {
+  color: var(--primary-color-medium-light);
+}
+
+.form-control:empty {
+  background: var(--primary-color-light);
+}
+
+.form-control:hover:not(:disabled) {
+  background: var(--primary-color-light);
+  border-color: var(--primary-color-medium-light);
+}
+
+.form-control:focus {
+  outline: none;
+  background: var(--primary-color-light);
+  border-color: var(--primary-color-medium-light);
+}
+
+.conversion-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.price-type-selector {
+  display: flex;
+  flex-direction: row;
+  background: var(--primary-color-light);
+  border: 1px solid var(--primary-color-dark);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.price-type-selector.standalone {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.price-type-option {
+  padding: 0.8rem 1.5rem;
+  margin: 0;
   font-size: 1rem;
-  font-weight: bold;
-}
-
-select:hover {
-  background-color: hsl(97, 40%, 27%);
-}
-
-#tipo-precio {
-  gap: 0;
-  font-size: 11px;
-  font-weight: bold;
-  font-style: monospace;
-  color: hsl(97, 20%, 67%);
+  text-align: center;
+  transition: all 0.2s ease;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color-medium-light);
+  cursor: pointer;
+  border-right: 1px solid var(--primary-color-dark);
   user-select: none;
 }
 
-#tipo-precio {
-  .active {
-    transition: color 0.2s ease-in-out;
-    color: white;
+.price-type-option:last-child {
+  border-right: none;
+}
+
+.price-type-option:hover {
+  background: var(--primary-color-focus);
+  color: white;
+}
+
+.price-type-option-active {
+  background: var(--primary-color-focus);
+  color: white;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .price-type-option {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
   }
+}
+
+/* Back Button */
+.back-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 2rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.back-button.visible {
+  transform: translateY(0);
+}
+
+.back-button button {
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+  font-weight: bold;
+  border: none;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.back-button button:hover {
+  background-color: var(--primary-color-medium);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+  background: var(--primary-color-medium);
+  color: white;
+  border: 1px solid var(--primary-color-dark);
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-color-hover);
+  transform: translateY(-1px);
+}
+
+.conversion-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.arrow-symbol {
+  font-size: 2rem;
+  color: var(--primary-color-medium-light);
+  transition: transform 0.3s ease;
+}
+
+.arrow-symbol-left {
+  transform: rotate(180deg);
 }

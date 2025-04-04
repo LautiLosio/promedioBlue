@@ -1,167 +1,258 @@
-center {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
+@import url("../utilities.css");
 
-.hidden {
-  height: 0 !important;
-  overflow: hidden !important;
-  filter: opacity(0);
-  transition: all 0.5s ease;
-}
-
-#dolar-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-}
-
-select {
-  padding: 0.5rem;
-  border: 2px solid hsl(97, 50%, 77%);
-  background-color: hsl(97, 40%, 37%);
-  color: white;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-select:hover {
-  background-color: hsl(97, 40%, 27%);
-}
-
-#dateContainer {
-  display: flex;
-  width: 100%;
-}
-
-#dateInput {
-  width: 100%;
-  padding: 0.5rem;
-  border: 2px solid hsl(97, 50%, 77%);
-  background-color: hsl(97, 40%, 37%);
-  color: white;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-#dateInput:hover {
-  background-color: hsl(97, 40%, 27%);
-}
-
-#dateInput::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}
-
-:disabled {
-  filter: saturate(0.3) brightness(0.8);
-  cursor: not-allowed !important;
-
-}
-
-#dateInput::placeholder {
-  color: hsl(97, 20%, 67%);
-}
-
-#submitButton {
-  display: flex;
-  width: 100%;
-  padding: 0.5rem;
-}
-
-#preciosContainer {
-  display: flex;
+.historico-page {
   height: 100%;
-  gap: 1rem;
-  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.precio-container {
+.historico-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.historico-header h1 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+}
+
+.historico-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* Main Sections */
+.historico-price-section, .historico-chart-section, .historico-stats-section {
+  background: var(--primary-color-light);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--primary-color-dark);
+  border-radius: 15px;
+  padding: 2rem;
+  width: 100%;
+}
+
+/* Price Section */
+.historico-price-display {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.historico-price-card {
+  padding: 1.2rem;
+  text-align: center;
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.historico-price-card-main {
+  grid-column: span 1;
+  color: var(--text-color);
+  background: var(--primary-color-medium);
+}
+
+.historico-price-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(1rem, 1.5vw, 1rem);
+  opacity: 0.8;
+}
+
+.historico-price-card h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+}
+
+.historico-price-card-main h2 {
+  font-size: clamp(1.8rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+/* Form Controls */
+.historico-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
-  background-color: hsla(97, 50%, 87%, 0.3);
-  border: 2px solid hsl(97, 50%, 87%);
-  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.historico-form-group label {
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.historico-form-control {
   padding: 1rem;
-  min-width: 200px;
+  background: var(--primary-color-light);
+  border: 1px solid var(--primary-color-dark);
+  color: white;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
 }
 
-.smaller-precio {
-  color: hsl(97, 30%, 87%);
-  font-size: medium;
+.historico-form-control:hover:not(:disabled) {
+  background: var(--primary-color-focus);
+  border-color: var(--primary-color-medium);
 }
 
-.spacer-4 {
-  height: 4rem;
+.historico-form-control:focus {
+  outline: none;
+  background: var(--primary-color-focus);
+  border-color: var(--primary-color);
 }
 
+.historico-form-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
-#chartContainer {
+.historico-form-label {
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.historico-btn-primary {
+  background: var(--primary-color-medium);
+  color: white;
+  border: 1px solid var(--primary-color-dark);
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.historico-btn-primary:hover:not(:disabled) {
+  background: var(--primary-color-hover);
+  transform: translateY(-1px);
+}
+
+.historico-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Chart Section */
+.historico-chart-header {
   display: flex;
-  width: 100%;
-  height: 600px;
-  justify-content: center;
-  padding: 0;
-  filter: opacity(1);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.historico-chart-header h2 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.historico-chart-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.historico-btn-icon {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--primary-color);
+  transition: all 0.2s ease;
+}
+
+.historico-btn-icon:hover {
+  transform: scale(1.1);
+  color: white;
 }
 
 #chart {
-  display: flex;
-  background-color: hsla(97, 50%, 87%, 0.3);
-  border: 2px solid hsl(97, 50%, 87%);
-  color: white;
+  height: 300px;
+  width: 100%;
+  background: var(--primary-color-light);
   border-radius: 10px;
-  width: 70%;
-  height: 100%;
   padding: 1rem;
-  margin-bottom: 5rem;
 }
 
-@media screen and (max-width: 770px){
-
-  #preciosContainer {
-    flex-direction: column;
-    flex-grow: 1;
-  }
-
-  #chart {
-    width: 90%;
-  }
+/* Stats Section */
+.historico-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem
 }
 
-.volver {
+.historico-stats-title {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.historico-stat-card {
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--primary-color-light);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.historico-stat-card:hover {
+  background: var(--primary-color-focus);
+}
+
+.historico-stat-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.historico-stat-card p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Back Button */
+.historico-back-button {
   display: flex;
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  margin: 1rem 0;
-  padding: 1rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 2rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
 
-.volver button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: hsl(97, 50%, 87%);
-  color: #40612a;
+.historico-back-button.visible {
+  transform: translateY(0);
+}
+
+.historico-back-button button {
+  background-color: var(--primary-color);
+  color: var(--bg-color);
   font-weight: bold;
   border: none;
   padding: 1rem;
@@ -169,4 +260,176 @@ select:hover {
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
 }
+
+.historico-back-button button:hover {
+  background-color: var(--primary-color-hover);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.hidden {
+  display: none;
+}
+
+/* Date input styling */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+@media (max-width: 768px) {
+  .historico-page {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .historico-price-section, .historico-chart-section, .historico-stats-section {
+    padding: 1.5rem;
+  }
+
+  .historico-price-display {
+    grid-template-columns: 1fr;
+  }
+
+  .historico-price-card {
+    padding: 1rem;
+  }
+
+  .historico-header h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .historico-price-card h2 {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+  }
+
+  .historico-price-card-main {
+    grid-column: span 1;
+  }
+
+  .historico-price-card-main h2 {
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
+  }
+}
+
+/* Additional styles from calculadora.css */
+.historico-input-group {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.historico-input-group-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
+}
+
+.historico-form-control-numeric {
+  text-align: right;
+}
+
+.historico-currency-symbol {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color-medium-light);
+  font-size: 1.5rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.historico-form-control-select {
+  font-size: 1.2rem;
+  padding: 0.8rem 1rem;
+  padding-right: 3rem;
+}
+
+.historico-form-control-select option {
+  background-color: var(--bg-color);
+  color: white;
+}
+
+.historico-form-control::placeholder {
+  color: var(--primary-color-medium-light);
+}
+
+.historico-form-control:empty {
+  background: var(--primary-color-light);
+}
+
+.historico-conversion-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.historico-price-type-selector {
+  display: flex;
+  flex-direction: row;
+  background: var(--primary-color-light);
+  border: 1px solid var(--primary-color-dark);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.historico-price-type-selector.standalone {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.historico-price-type-option {
+  padding: 0.8rem 1.5rem;
+  margin: 0;
+  font-size: 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color-medium-light);
+  cursor: pointer;
+  border-right: 1px solid var(--primary-color-dark);
+  user-select: none;
+}
+
+.historico-price-type-option:last-child {
+  border-right: none;
+}
+
+.historico-price-type-option:hover {
+  background: var(--primary-color-focus);
+  color: white;
+}
+
+.historico-price-type-option-active {
+  background: var(--primary-color-focus);
+  color: white;
+  font-weight: 500;
+}
+
+.historico-conversion-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.historico-arrow-symbol {
+  font-size: 2rem;
+  color: var(--primary-color-medium-light);
+  transition: transform 0.3s ease;
+}
+
+.historico-arrow-symbol-left {
+  transform: rotate(180deg);
+}
+

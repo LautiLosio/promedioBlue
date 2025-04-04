@@ -12,20 +12,6 @@
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
   <meta name="apple-mobile-web-app-status-bar" content="#3e6029" />
   <meta name="theme-color" content="#88bd66" />
 
@@ -47,11 +33,18 @@
   <meta name="twitter:description" content="Chequea el valor promedio del dolar blue hoy">
   <meta name="twitter:image" content="https://lautilosio.github.io/proyectos/dolar/share_banner.png">
   
+  <!-- Preload critical resources -->
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="main.js" as="script">
+  
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://cdn.cafecito.app">
 </head>
 
 <body>
 
-  <span class="container">
+  <span class="index-container">
     <div class="title">
       <h1>Dolar Blue Hoy</h1>
     </div>

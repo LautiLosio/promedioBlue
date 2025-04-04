@@ -11,48 +11,87 @@
   <link rel="stylesheet" href="calculadora.css">
 </head>
 <body>
-  <div class="calculadora">
-    <h1>Calculadora</h1>
-    <section class="calculadora-form-container">
-      <div id="dolaresSelect">
-        <p>U$D</p>
+  <div class="calculator-page">
+    <h1 class="page-title">Calculadora</h1>
+    
+    <div class="calculator-layout">
+      <!-- Conversion Box -->
+      <div class="calculator-section">
+        <div class="conversion-group">
+          <!-- From Currency Input -->
+          <div class="form-group">
+            <label class="form-label" for="fromInput">Monto</label>
+            <div class="input-group">
+              <div class="input-group-wrapper">
+                <span class="currency-symbol">$</span>
+                <input 
+                  id="fromInput" 
+                  name="from"
+                  class="form-control form-control-numeric"
+                  inputmode="numeric"
+                  placeholder="0,00">
+              </div>
+            </div>
+          </div>
 
-        <select name="dolares" id="dolarType">
-        </select>
-        
-        <div id="tipo-precio" class="flex-column clickable">
-          <p>CMP</p>
-          <p class="active">PRM</p>
-          <p>VTA</p>
+          <div class="conversion-arrow">
+            <span class="arrow-symbol">&DownArrow;</span>
+          </div>
+
+          <!-- To Currency Input -->
+          <div class="form-group">
+            <label class="form-label" for="pesoInput">Pesos Argentinos (ARS)</label>
+            <div class="input-group">
+              <div class="input-group-wrapper">
+                <span class="currency-symbol">$</span>
+                <input  
+                  id="pesoInput" 
+                  name="pesos" 
+                  class="form-control form-control-numeric"
+                  inputmode="numeric"
+                  placeholder="0,00">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selectors Box -->
+      <div class="calculator-section">
+        <div class="form-group">
+          <label class="form-label" for="fromCurrency">Moneda</label>
+          <select name="fromCurrency" id="fromCurrency" class="form-control form-control-select">
+            <option value="USD">Dólar (USD)</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="BRL">Real (BRL)</option>
+            <option value="CLP">Peso Chileno (CLP)</option>
+            <option value="UYU">Peso Uruguayo (UYU)</option>
+          </select>
+        </div>
+
+        <div id="dolaresSelect" class="form-group">
+          <label class="form-label" for="dolarType">Tipo de dólar</label>
+          <select name="dolares" id="dolarType" class="form-control form-control-select"></select>
         </div>
         
+        <div class="form-group">
+          <label class="form-label">Cotización</label>
+          <div id="tipo-precio" class="price-type-selector standalone">
+            <p class="price-type-option">Compra</p>
+            <p class="price-type-option price-type-option-active">Promedio</p>
+            <p class="price-type-option">Venta</p>
+          </div>
+        </div>
       </div>
-      <!-- <input type='number' 
-           inputMode='decimal'
-           placeholder='Type a number and blur' 
-           onFocus="this.type='number'; this.value=this.lastValue" 
-           onBlur="this.type=''; this.lastValue=this.value; this.value=this.value==''?'':(+this.value).toLocaleString()"> -->
-      <input 
-        id="dolarInput" name="dolares"
-        inputmode="numeric"
-        placeholder="USD">
-      <p>&DownArrow;</p>
-      <p>ARS</p>
-      <input  
-        id="pesoInput" name="pesos" 
-        inputmode="numeric"
-        placeholder="ARS">
-    </section>
+    </div>
 
-    <!-- volver atras -->
-    <div class="volver">
-      <button onclick="window.history.back()" class="btn">
+    <div class="back-button visible">
+      <button onclick="window.history.back()" class="btn-primary">
         💸 Volver
       </button>
     </div>
   </div>
 
   <script src="calculadora.js"></script>
-  
 </body>
 </html>

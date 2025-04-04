@@ -5,63 +5,108 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historico Dolar</title>
+    <link rel="stylesheet" href="../utilities.css">
     <link rel="stylesheet" href="historico.css">
     <link rel="stylesheet" href="../style.css">
     <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">  
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">  
 
+    <!-- Preload critical resources -->
+    <link rel="preload" href="historico.css" as="style">
+    <link rel="preload" href="historico.js" as="script">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
   </head>
   <body>
-
-    <center>
-      <div id="dolar-form">
-
-        <h2 class="title">Elije el tipo de dolar y la fecha</h2>
-        <div class="spacer-4"></div>
-
-        <span id="preciosContainer">
-          <div class="precio-container smaller-precio">
-            <h3>Compra</h3>
-            <h2 id="precioCompra">---</h2>
-          </div>
-          <div class="precio-container">
-            <h3>Promedio</h3>
-            <h2 id="precioPromedio">---</h2>
-          </div>
-          <div class="precio-container smaller-precio">
-            <h3>Venta</h3>
-            <h2 id="precioVenta">---</h2>
-          </div>
-        </span>
-  
-        <div class="spacer-4"></div>
-
-        <form id="dateForm" action="#">
-          <select name="dolares" id="dolarType">
-          </select>
-          <div id="dateContainer">
-            <input type="text" id="dateInput" name="date" required disabled placeholder="Fecha">
-          </div>
-          <input type="submit" value="Buscar" class="btn btn-primary" id="submitButton" disabled>
-        </form>
-      </div>
-
-      <div class="spacer-4"></div>
-
-      
-      <div id="chartContainer" class="hidden">
-        <div id="chart"></div>
-      </div>
-
-      <div class="spacer-4"></div>
-
-      <div class="volver">
-        <button onclick="window.history.back()" class="btn">
-          💸 Volver
-        </button>
+    <div class="historico-page">
+      <div class="historico-header">
+        <h1>Histórico del Dólar</h1>
       </div>
       
-    </center>
+      <div class="historico-layout">
+        <div class="historico-price-section">
+          <div class="historico-price-display">
+            <div class="historico-price-card">
+              <h3>Compra</h3>
+              <h2 id="precioCompra">---</h2>
+            </div>
+            <div class="historico-price-card historico-price-card-main">
+              <h3>Promedio</h3>
+              <h2 id="precioPromedio">---</h2>
+            </div>
+            <div class="historico-price-card">
+              <h3>Venta</h3>
+              <h2 id="precioVenta">---</h2>
+            </div>
+          </div>
+
+          <form id="dateForm" class="historico-search-form">
+            <div class="historico-form-group">
+              <label for="dolarType">Tipo de Dólar</label>
+              <select id="dolarType" class="historico-form-control" required>
+                <option value="" disabled>Seleccionar tipo...</option>
+              </select>
+            </div>
+            <div class="historico-form-group">
+              <label for="dateInput">Fecha</label>
+              <input type="date" id="dateInput" class="historico-form-control" disabled>
+            </div>
+            <button type="submit" id="submitButton" class="historico-btn-primary" disabled>Buscar</button>
+          </form>
+        </div>
+
+        <div class="historico-chart-section">
+          <div class="historico-form-group">
+            <label class="historico-form-label" for="rangeInput">Rango de días</label>
+            <select id="rangeInput" class="historico-form-control">
+              <option value="7">Una semana</option>
+              <option value="30" selected>Un mes</option>
+              <option value="90">Tres meses</option>
+              <option value="180">Seis meses</option>
+              <option value="365">Un año</option>
+            </select>
+          </div>
+
+          <div id="chartContainer">
+            <div class="historico-chart-header">
+              <h2>Evolución del Precio</h2>
+              <div class="historico-chart-controls">
+                <button id="toggleChartType" class="historico-btn-icon">📊</button>
+                <button id="downloadData" class="historico-btn-icon">📥</button>
+              </div>
+            </div>
+            <div id="chart"></div>
+          </div>
+        </div>
+
+        <div id="statsContainer" class="historico-stats-section">
+          <h2 class="historico-stats-title">Estadísticas</h2>
+          <div class="historico-stats-grid">
+            <div class="historico-stat-card">
+              <h3>Precio Mínimo</h3>
+              <p id="min-price">$0.00</p>
+            </div>
+            <div class="historico-stat-card">
+              <h3>Precio Promedio</h3>
+              <p id="avg-price">$0.00</p>
+            </div>
+            <div class="historico-stat-card">
+              <h3>Precio Máximo</h3>
+              <p id="max-price">$0.00</p>
+            </div>
+            <div class="historico-stat-card">
+              <h3>Variación</h3>
+              <p id="price-change">0.00%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="historico-back-button">
+      <button onclick="window.history.back()" class="historico-btn-primary">
+        💸 Volver
+      </button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="historico.js"></script>
