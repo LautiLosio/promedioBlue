@@ -262,8 +262,8 @@ input {
     animation: bgPan 10s linear infinite;
   }
 
-  .container {
-    max-width: 800px;
+  .index-container {
+    max-width: 500px;
     margin: 0 auto;
     padding: 0;
   }
