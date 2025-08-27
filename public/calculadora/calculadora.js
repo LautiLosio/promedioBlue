@@ -32,7 +32,7 @@ async function loadData() {
   });
 
   selectedDolarValue = cotizaciones.find(item => item.casa == dolarType.value);
-
+  updateFromLabel();
   updateRateDisplay();
 }
 
@@ -93,7 +93,7 @@ function updateRateDisplay() {
     // Foreign -> ARS (default)
     arrow.innerHTML = '&DownArrow;';
     rateLeft.textContent = `${fromCurrency.value} $1`;
-    rateRight.textContent = `ARS ${formatNumber(rate)}`;
+    rateRight.textContent = `ARS $${formatNumber(rate)}`;
   }
 }
 
