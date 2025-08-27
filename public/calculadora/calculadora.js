@@ -6,6 +6,8 @@ let dolaresSelect = document.getElementById("dolaresSelect");
 let tipoPrecioElement = document.getElementById("tipo-precio");
 let arrow = document.querySelector(".arrow-symbol");
 let fromLabel = document.querySelector('label[for="fromInput"]');
+let rateLeft = document.getElementById("rateLeft");
+let rateRight = document.getElementById("rateRight");
 
 let cotizaciones = {};
 let selectedDolarValue;
@@ -30,6 +32,8 @@ async function loadData() {
   });
 
   selectedDolarValue = cotizaciones.find(item => item.casa == dolarType.value);
+
+  updateRateDisplay();
 }
 
 loadData();
@@ -49,6 +53,50 @@ function updateFromLabel() {
   }
 }
 
+function getSelectedRate() {
+  if (fromCurrency.value === "USD") {
+    return selectedDolarValue ? selectedDolarValue[tipoPrecio] : undefined;
+  }
+  const selected = rates[fromCurrency.value.toLowerCase()];
+  return selected ? selected.venta : undefined;
+}
+
+function formatSmallCurrency(value) {
+  if (!isFinite(value) || value === 0) return "0";
+  const abs = Math.abs(value);
+  if (abs >= 1) {
+    return abs.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  // Find first non-zero digit after decimal and round to that place
+  const asString = abs.toString();
+  const match = asString.match(/0\.(0*)(\d)/);
+  if (!match) {
+    return abs.toLocaleString("en-US", { maximumFractionDigits: 6 });
+  }
+  const zeros = match[1].length;
+  const decimals = zeros + 1;
+  const rounded = Math.round(abs * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  return rounded.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function updateRateDisplay() {
+  const rate = getSelectedRate();
+  if (!rate || !rateLeft || !rateRight) return;
+
+  if (lastTouchedInput === pesoInput) {
+    // ARS -> Foreign
+    arrow.innerHTML = '&UpArrow;';
+    rateLeft.textContent = 'ARS $1';
+    const inverted = 1 / rate;
+    rateRight.textContent = `${fromCurrency.value} $${formatSmallCurrency(inverted)}`;
+  } else {
+    // Foreign -> ARS (default)
+    arrow.innerHTML = '&DownArrow;';
+    rateLeft.textContent = `${fromCurrency.value} $1`;
+    rateRight.textContent = `ARS ${formatNumber(rate)}`;
+  }
+}
+
 // Currency selection change
 fromCurrency.addEventListener("change", function() {
   dolaresSelect.style.display = this.value === "USD" ? "flex" : "none";
@@ -56,6 +104,7 @@ fromCurrency.addEventListener("change", function() {
   if (lastTouchedInput) {
     calcluateValue(lastTouchedInput, lastTouchedInput == fromInput ? pesoInput : fromInput);
   }
+  updateRateDisplay();
 });
 
 // Dolar type change
@@ -65,6 +114,7 @@ dolarType.addEventListener("change", function() {
   if (lastTouchedInput) {
     calcluateValue(lastTouchedInput, lastTouchedInput == fromInput ? pesoInput : fromInput);
   }
+  updateRateDisplay();
 });
 
 // Update price type selection
@@ -97,6 +147,7 @@ tipoPrecioElement.addEventListener("click", function(e) {
   if (lastTouchedInput) {
     calcluateValue(lastTouchedInput, lastTouchedInput == fromInput ? pesoInput : fromInput);
   }
+  updateRateDisplay();
 });
 
 // Input handling
@@ -106,11 +157,13 @@ for (let input of [fromInput, pesoInput]) {
   input.addEventListener("focus", function() {
     lastTouchedInput = input;
     updateArrowDirection();
+    updateRateDisplay();
   });
 
   input.addEventListener("input", function() {
     calcluateValue(input, otherInput);
     updateArrowDirection();
+    updateRateDisplay();
   });
 
   input.addEventListener("keydown", function(event) {
@@ -233,13 +286,12 @@ document.addEventListener('mousemove', (e) => {
 });
 
 function updateArrowDirection() {
-  const isMobile = window.innerWidth <= 768;
-  const arrow = document.querySelector(".arrow-symbol");
-  
   if (lastTouchedInput === fromInput) {
     arrow.classList.remove("arrow-symbol-left");
+    arrow.innerHTML = '&DownArrow;';
   } else {
     arrow.classList.add("arrow-symbol-left");
+    arrow.innerHTML = '&UpArrow;';
   }
 }
 

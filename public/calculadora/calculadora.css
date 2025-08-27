@@ -264,10 +264,12 @@
 }
 
 .conversion-arrow {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  width: 100%;
+  gap: 0.75rem;
+  padding: 1rem 0.5rem;
 }
 
 .arrow-symbol {
@@ -278,4 +280,20 @@
 
 .arrow-symbol-left {
   transform: rotate(180deg);
+}
+
+.rate-display-left,
+.rate-display-right {
+  font-weight: 400;
+  color: var(--primary-color-medium-light);
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.rate-display-left {
+  text-align: right;
+}
+
+.rate-display-right {
+  text-align: left;
 }
