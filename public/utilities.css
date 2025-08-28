@@ -16,6 +16,7 @@
   --border-radius-sm: 10px;
   --border-radius-md: 15px;
   --transition-speed: 0.2s;
+  --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Layout utilities */
@@ -156,9 +157,9 @@
 .backdrop-blur { backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
 
 /* Transitions */
-.transition { transition: all var(--transition-speed) ease; }
-.transition-transform { transition: transform var(--transition-speed) ease; }
-.transition-colors { transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease; }
+.transition { transition: all var(--transition-speed) var(--transition-ease) }
+.transition-transform { transition: transform var(--transition-speed) var(--transition-ease) }
+.transition-colors { transition: background-color var(--transition-speed) var(--transition-ease), border-color var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease) }
 
 /* Hover states */
 .hover\:bg-primary-light:hover { background-color: var(--primary-color-light); }
@@ -214,7 +215,7 @@
   border: 1px solid var(--primary-color-dark);
   border-radius: var(--border-radius-md);
   padding: 2rem;
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-speed) var(--transition-ease)
 }
 
 .card:hover {
@@ -230,7 +231,7 @@
   border-radius: var(--border-radius-sm);
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-speed) var(--transition-ease);
   font-weight: bold;
 }
 
@@ -251,7 +252,7 @@
   color: var(--text-color);
   border-radius: var(--border-radius-sm);
   font-size: 1.1rem;
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-speed) var(--transition-ease);
 }
 
 .form-control:hover:not(:disabled) {

@@ -82,7 +82,7 @@
   color: white;
   border-radius: 10px;
   font-size: 2rem;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 500;
   box-sizing: border-box;
 }
@@ -174,7 +174,7 @@
   margin: 0;
   font-size: 1rem;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   flex: 1;
   display: flex;
   align-items: center;
@@ -220,7 +220,7 @@
   margin: 0;
   padding: 2rem;
   transform: translateY(100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
 }
 
@@ -237,7 +237,7 @@
   border-radius: 10px;
   font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -254,7 +254,7 @@
   border-radius: 10px;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: bold;
 }
 
@@ -275,7 +275,7 @@
 .arrow-symbol {
   font-size: 2rem;
   color: var(--primary-color-medium-light);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .arrow-symbol-left {
