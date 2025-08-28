@@ -3,17 +3,60 @@ let pesoInput = document.getElementById("pesoInput");
 let fromCurrency = document.getElementById("fromCurrency");
 let dolarType = document.getElementById("dolarType");
 let dolaresSelect = document.getElementById("dolaresSelect");
+let fromCurrencyGroup = document.getElementById("fromCurrencyGroup");
 let tipoPrecioElement = document.getElementById("tipo-precio");
 let arrow = document.querySelector(".arrow-symbol");
 let fromLabel = document.querySelector('label[for="fromInput"]');
 let rateLeft = document.getElementById("rateLeft");
 let rateRight = document.getElementById("rateRight");
+let historicoNotice = document.getElementById("historicoNotice");
+let historicoNoticeCasa = document.getElementById("historicoNoticeCasa");
+let historicoNoticeFecha = document.getElementById("historicoNoticeFecha");
+let changeFromHistoricoBtn = document.getElementById("changeFromHistorico");
 
 let cotizaciones = {};
 let selectedDolarValue;
 let lastTouchedInput;
 let tipoPrecio = "promedio";
 let rates = {};
+
+function resetHistoricoModeUI() {
+  // Hide notice
+  if (historicoNotice) historicoNotice.classList.add('hidden');
+  // Show selectors and enable inputs
+  if (fromCurrencyGroup) fromCurrencyGroup.classList.remove('hidden');
+  if (dolaresSelect) dolaresSelect.classList.remove('hidden');
+  if (fromCurrency) fromCurrency.disabled = false;
+  if (dolarType) dolarType.disabled = false;
+}
+
+// Evaluate a number or a simple math expression (.+-*/ and parentheses)
+function parseNumericOrExpression(raw) {
+  if (typeof raw !== 'string') return NaN;
+  const trimmed = raw.trim();
+  if (trimmed === '') return NaN;
+  // Remove thousands separators and normalize decimal comma
+  const normalized = trimmed.replace(/\./g, '').replace(/,/g, '.');
+  // If it contains only digits and a dot, parse normally
+  if (/^[0-9]*\.?[0-9]*$/.test(normalized)) {
+    const num = parseFloat(normalized);
+    return isFinite(num) ? num : NaN;
+  }
+  // Allow only math-safe characters
+  if (!/^[0-9+\-*/().\s]+$/.test(normalized)) return NaN;
+  // Must contain an operator or parentheses to be treated as expression
+  if (!/[+\-*/()]/.test(normalized)) {
+    const num = parseFloat(normalized);
+    return isFinite(num) ? num : NaN;
+  }
+  try {
+    // eslint-disable-next-line no-new-func
+    const result = Function(`"use strict"; return (${normalized})`)();
+    return typeof result === 'number' && isFinite(result) ? result : NaN;
+  } catch (_) {
+    return NaN;
+  }
+}
 
 // Load initial data
 async function loadData() {
@@ -36,12 +79,81 @@ async function loadData() {
   updateRateDisplay();
 }
 
-loadData();
+function initHistoricoMode(selection) {
+  fromCurrency.value = "USD";
+  if (selection.casa) {
+    dolarType.value = selection.casa;
+  }
+  selectedDolarValue = {
+    casa: selection.casa,
+    compra: selection.compra,
+    venta: selection.venta,
+    promedio: selection.promedio
+  };
+  if (fromCurrencyGroup) {
+    fromCurrencyGroup.classList.add('hidden');
+    fromCurrency.disabled = true;
+  }
+  if (dolaresSelect) {
+    dolaresSelect.classList.add('hidden');
+    dolarType.disabled = true;
+  }
+  if (historicoNotice && historicoNoticeCasa && historicoNoticeFecha) {
+    historicoNoticeCasa.textContent = `Dólar ${selection.casa.charAt(0).toUpperCase() + selection.casa.slice(1)}`;
+    try {
+      historicoNoticeFecha.textContent = new Intl.DateTimeFormat('es-AR', { year: 'numeric', month: 'long', day: '2-digit' }).format(new Date(selection.fecha));
+    } catch (e) {
+      historicoNoticeFecha.textContent = selection.fecha;
+    }
+    historicoNotice.classList.remove('hidden');
+  }
+  if (changeFromHistoricoBtn) {
+    changeFromHistoricoBtn.addEventListener('click', () => {
+      window.location.href = '../historico/historico.html';
+    });
+  }
+  updateFromLabel();
+  updateRateDisplay();
+}
+
+const params = new URLSearchParams(window.location.search);
+const fromHistorico = params.get('from') === 'historico';
+let historicoMode = false;
+const storedSelectionRaw = sessionStorage.getItem('historicoSelection');
+if (fromHistorico && storedSelectionRaw) {
+  try {
+    const selection = JSON.parse(storedSelectionRaw);
+    historicoMode = true;
+    initHistoricoMode(selection);
+  } catch (e) {
+    resetHistoricoModeUI();
+    loadData();
+  }
+} else {
+  historicoMode = false;
+  resetHistoricoModeUI();
+  loadData();
+}
+
+// Handle bfcache/back-forward restore
+window.addEventListener('pageshow', function() {
+  const paramsNow = new URLSearchParams(window.location.search);
+  const fromNow = paramsNow.get('from') === 'historico';
+  if (!fromNow) {
+    historicoMode = false;
+    resetHistoricoModeUI();
+  }
+});
 
 function updateFromLabel() {
   const currency = fromCurrency.value;
   if (currency === "USD") {
-    fromLabel.textContent = `Dólar ${dolarType.value.charAt(0).toUpperCase() + dolarType.value.slice(1)}`;
+    const casaName = selectedDolarValue && selectedDolarValue.casa
+      ? selectedDolarValue.casa
+      : dolarType.value;
+    if (casaName) {
+      fromLabel.textContent = `Dólar ${casaName.charAt(0).toUpperCase() + casaName.slice(1)}`;
+    }
   } else {
     const currencyNames = {
       "EUR": "Euro",
@@ -97,6 +209,7 @@ function updateRateDisplay() {
 
 // Currency selection change
 fromCurrency.addEventListener("change", function() {
+  if (historicoMode) return; // locked by historico selection
   dolaresSelect.style.display = this.value === "USD" ? "flex" : "none";
   updateFromLabel();
   if (lastTouchedInput) {
@@ -107,6 +220,7 @@ fromCurrency.addEventListener("change", function() {
 
 // Dolar type change
 dolarType.addEventListener("change", function() {
+  if (historicoMode) return; // locked by historico selection
   selectedDolarValue = cotizaciones.find(item => item.casa === dolarType.value);
   updateFromLabel();
   if (lastTouchedInput) {
@@ -172,15 +286,12 @@ for (let input of [fromInput, pesoInput]) {
   });
 
   input.addEventListener("blur", function() {
-    input.value = formatNumber(parseFloat(input.value.replace(/\./g, "").replace(",", ".")));
-    otherInput.value = formatNumber(parseFloat(otherInput.value.replace(/\./g, "").replace(",", ".")));
+    const leftVal = parseNumericOrExpression(input.value);
+    const rightVal = parseNumericOrExpression(otherInput.value);
+    input.value = isFinite(leftVal) ? formatNumber(leftVal) : "";
+    otherInput.value = isFinite(rightVal) ? formatNumber(rightVal) : "";
 
     if (input.value == "") {
-      otherInput.value = "";
-    }
-
-    if (input.value == "NaN") {
-      input.value = "";
       otherInput.value = "";
     }
   });
@@ -192,7 +303,11 @@ function calcluateValue(touchedInput, otherInput) {
     return;
   }
 
-  let value = parseFloat(touchedInput.value.replace(/\./g, "").replace(",", "."));
+  let value = parseNumericOrExpression(touchedInput.value);
+  if (!isFinite(value)) {
+    otherInput.value = "";
+    return;
+  }
   let result;
 
   if (touchedInput == pesoInput) {

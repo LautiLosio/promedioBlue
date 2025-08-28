@@ -126,43 +126,7 @@ nav {
   font-size: 0.9rem;
 }
 
-.volver {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 2rem;
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
-  z-index: 1000;
-}
-
-.volver.visible {
-  transform: translateY(0);
-}
-
-.volver button {
-  background-color: var(--primary-color);
-  color: var(--bg-color);
-  font-weight: bold;
-  border: none;
-  padding: 1rem;
-  border-radius: 10px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
-}
-
-.volver button:hover {
-  background-color: var(--primary-color-hover);
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
-}
+/* Back button now inherits from .back-button in style.css */
 
 nav a:hover {
   background-color: var(--primary-color-hover);

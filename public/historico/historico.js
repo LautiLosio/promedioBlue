@@ -13,6 +13,7 @@ const precioVenta = document.getElementById('precioVenta');
 const statsContainer = document.getElementById('statsContainer');
 const toggleChartType = document.getElementById('toggleChartType');
 const downloadData = document.getElementById('downloadData');
+const useInCalculator = document.getElementById('useInCalculator');
 
 // Variables
 let cotizaciones = [];
@@ -25,9 +26,9 @@ const ARGENTINA_DATOS_API = 'https://api.argentinadatos.com/v1';
 // Scroll behavior for back button
 let lastScrollTop = 0;
 let scrollTimeout;
-const volverButton = document.querySelector('.historico-back-button');
-const SCROLL_THRESHOLD = 200; // Show button after scrolling this many pixels
-const SCROLL_TIMEOUT = 1500; // Hide button after this many milliseconds of no scrolling
+const volverButton = document.querySelector('.back-button');
+const SCROLL_THRESHOLD = 50;
+const SCROLL_TIMEOUT = 1500;
 
 // Keep track of currently displayed data
 let currentDisplayData = [];
@@ -298,6 +299,10 @@ dateForm.addEventListener('submit', async function(e) {
   });
   
   updateUI(filteredData);
+  // Reveal the "Use in Calculator" button after a specific search
+  if (useInCalculator && filteredData.length > 0) {
+    useInCalculator.classList.remove('hidden');
+  }
 });
 
 // Update toggle chart to use current data
@@ -314,24 +319,39 @@ downloadData.addEventListener('click', function() {
   }
 });
 
+// Send selected quotation to calculator
+if (useInCalculator) {
+  useInCalculator.addEventListener('click', function() {
+    if (!currentDisplayData || currentDisplayData.length === 0) return;
+    const last = currentDisplayData[currentDisplayData.length - 1];
+    const selection = {
+      source: 'historico',
+      casa: selectedCasa,
+      fecha: last.fecha,
+      compra: last.compra,
+      venta: last.venta,
+      promedio: (last.compra + last.venta) / 2
+    };
+    try {
+      sessionStorage.setItem('historicoSelection', JSON.stringify(selection));
+    } catch (e) {
+      console.error('No se pudo guardar la cotización seleccionada:', e);
+    }
+    window.location.href = '../calculadora/calculadora.html?from=historico';
+  });
+}
+
 // Scroll behavior for back button
 function handleScroll() {
   const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
   
-  // Show button if no scroll available or at top/bottom
-  if (documentHeight <= windowHeight || currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10) {
+  // Show button at the top, bottom, or when scrolling up
+  if (currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10 || currentScroll < lastScrollTop) {
     volverButton.classList.add('visible');
-    return;
-  }
-
-  // Handle scroll direction for rest of page
-  if (currentScroll < lastScrollTop) {
-    // Scrolling up
-    volverButton.classList.add('visible');
+    clearTimeout(scrollTimeout);
   } else {
-    // Scrolling down
     volverButton.classList.remove('visible');
   }
   
@@ -347,12 +367,14 @@ handleScroll();
 
 // Show button on mouse movement near bottom
 document.addEventListener('mousemove', (e) => {
-  const bottomThreshold = window.innerHeight - 100;
+  const bottomThreshold = window.innerHeight - 50;
   if (e.clientY > bottomThreshold && window.pageYOffset > SCROLL_THRESHOLD) {
     volverButton.classList.add('visible');
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-      volverButton.classList.remove('visible');
+      if (window.pageYOffset > SCROLL_THRESHOLD) {
+        volverButton.classList.remove('visible');
+      }
     }, SCROLL_TIMEOUT);
   }
 });
@@ -375,8 +397,7 @@ async function main() {
   selectedCasa = 'blue';
   dolarType.value = selectedCasa;
   
-  // Show button initially
-  volverButton.classList.add('visible');
+  // Initial visibility handled by handleScroll()
   
   const data = await fetchHistoricalData(selectedCasa);
   if (data.length > 0) {

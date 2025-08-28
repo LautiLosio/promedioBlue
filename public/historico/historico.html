@@ -51,6 +51,7 @@
               <input type="date" id="dateInput" class="historico-form-control" disabled>
             </div>
             <button type="submit" id="submitButton" class="historico-btn-primary" disabled>Buscar</button>
+            <button type="button" id="useInCalculator" class="historico-btn-primary hidden">Usar esta cotización en la calculadora</button>
           </form>
         </div>
 
@@ -102,11 +103,11 @@
       </div>
     </div>
 
-    <div class="historico-back-button">
-      <button onclick="window.history.back()" class="historico-btn-primary">
+    <div class="back-button">
+      <button onclick="window.history.back()">
         💸 Volver
       </button>
-    </div>
+    </div> 
 
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="historico.js"></script>

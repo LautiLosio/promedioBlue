@@ -6,9 +6,9 @@ let cotizaciones = [];
 // Scroll behavior for back button
 let lastScrollTop = 0;
 let scrollTimeout;
-const volverButton = document.querySelector('.volver');
-const SCROLL_THRESHOLD = 200; // Show button after scrolling this many pixels
-const SCROLL_TIMEOUT = 1500; // Hide button after this many milliseconds of no scrolling
+const volverButton = document.querySelector('.back-button');
+const SCROLL_THRESHOLD = 50;
+const SCROLL_TIMEOUT = 1500;
 
 function createPlaceholders() {
   placeholders = []; // Clear any existing placeholders
@@ -223,18 +223,11 @@ function handleScroll() {
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
   
-  // Show button if no scroll available or at top/bottom
-  if (documentHeight <= windowHeight || currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10) {
+  // Show button at the top, bottom, or when scrolling up
+  if (currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10 || currentScroll < lastScrollTop) {
     volverButton.classList.add('visible');
-    return;
-  }
-
-  // Handle scroll direction for rest of page
-  if (currentScroll < lastScrollTop) {
-    // Scrolling up
-    volverButton.classList.add('visible');
+    clearTimeout(scrollTimeout);
   } else {
-    // Scrolling down
     volverButton.classList.remove('visible');
   }
   
@@ -250,12 +243,14 @@ handleScroll();
 
 // Show button on mouse movement near bottom
 document.addEventListener('mousemove', (e) => {
-  const bottomThreshold = window.innerHeight - 100;
+  const bottomThreshold = window.innerHeight - 50;
   if (e.clientY > bottomThreshold && window.pageYOffset > SCROLL_THRESHOLD) {
     volverButton.classList.add('visible');
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-      volverButton.classList.remove('visible');
+      if (window.pageYOffset > SCROLL_THRESHOLD) {
+        volverButton.classList.remove('visible');
+      }
     }, SCROLL_TIMEOUT);
   }
 });
