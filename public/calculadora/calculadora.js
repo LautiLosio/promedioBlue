@@ -85,13 +85,11 @@ function updateRateDisplay() {
 
   if (lastTouchedInput === pesoInput) {
     // ARS -> Foreign
-    arrow.innerHTML = '&UpArrow;';
     rateLeft.textContent = 'ARS $1';
     const inverted = 1 / rate;
     rateRight.textContent = `${fromCurrency.value} $${formatSmallCurrency(inverted)}`;
   } else {
     // Foreign -> ARS (default)
-    arrow.innerHTML = '&DownArrow;';
     rateLeft.textContent = `${fromCurrency.value} $1`;
     rateRight.textContent = `ARS $${formatNumber(rate)}`;
   }
@@ -286,12 +284,10 @@ document.addEventListener('mousemove', (e) => {
 });
 
 function updateArrowDirection() {
-  if (lastTouchedInput === fromInput) {
-    arrow.classList.remove("arrow-symbol-left");
-    arrow.innerHTML = '&DownArrow;';
-  } else {
+  if (lastTouchedInput === pesoInput) {
     arrow.classList.add("arrow-symbol-left");
-    arrow.innerHTML = '&UpArrow;';
+  } else {
+    arrow.classList.remove("arrow-symbol-left");
   }
 }
 
