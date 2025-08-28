@@ -301,7 +301,7 @@ dateForm.addEventListener('submit', async function(e) {
   updateUI(filteredData);
   // Reveal the "Use in Calculator" button after a specific search
   if (useInCalculator && filteredData.length > 0) {
-    useInCalculator.classList.remove('hidden');
+    useInCalculator.classList.add('show');
   }
 });
 
