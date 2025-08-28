@@ -148,45 +148,6 @@ tipoPrecioElement.addEventListener("click", function(e) {
   updateRateDisplay();
 });
 
-// Simple, safe math expression evaluation for inputs
-function areParenthesesBalanced(expression) {
-  let depth = 0;
-  for (let i = 0; i < expression.length; i++) {
-    const ch = expression[i];
-    if (ch === '(') depth++;
-    if (ch === ')') {
-      depth--;
-      if (depth < 0) return false;
-    }
-  }
-  return depth === 0;
-}
-
-function evaluateExpression(raw) {
-  if (typeof raw !== 'string') return NaN;
-  // Normalize: remove spaces, strip thousands '.', convert ',' to '.', map ×, x, ÷, : to operators
-  const normalized = raw
-    .replace(/\s+/g, '')
-    .replace(/\./g, '') // thousands separators
-    .replace(/,/g, '.')
-    .replace(/[xX×]/g, '*')
-    .replace(/[÷:]/g, '/')
-    .replace(/−/g, '-') // minus sign variants
-    ;
-
-  // Allow only digits, operators, parentheses, and dot
-  if (!/^[\d+\-*/().]*$/.test(normalized)) return NaN;
-  if (!areParenthesesBalanced(normalized)) return NaN;
-
-  try {
-    // Use Function with strict whitelist above
-    const result = Function('"use strict";return(' + normalized + ')')();
-    return typeof result === 'number' && isFinite(result) ? result : NaN;
-  } catch (e) {
-    return NaN;
-  }
-}
-
 // Input handling
 for (let input of [fromInput, pesoInput]) {
   let otherInput = input == fromInput ? pesoInput : fromInput;
@@ -211,14 +172,17 @@ for (let input of [fromInput, pesoInput]) {
   });
 
   input.addEventListener("blur", function() {
-    const value = evaluateExpression(input.value);
-    if (!isFinite(value)) {
+    input.value = formatNumber(parseFloat(input.value.replace(/\./g, "").replace(",", ".")));
+    otherInput.value = formatNumber(parseFloat(otherInput.value.replace(/\./g, "").replace(",", ".")));
+
+    if (input.value == "") {
+      otherInput.value = "";
+    }
+
+    if (input.value == "NaN") {
       input.value = "";
       otherInput.value = "";
-      return;
     }
-    input.value = formatNumber(value);
-    calcluateValue(input, otherInput);
   });
 }
 
@@ -228,11 +192,7 @@ function calcluateValue(touchedInput, otherInput) {
     return;
   }
 
-  let value = evaluateExpression(touchedInput.value);
-  if (!isFinite(value)) {
-    otherInput.value = "";
-    return;
-  }
+  let value = parseFloat(touchedInput.value.replace(/\./g, "").replace(",", "."));
   let result;
 
   if (touchedInput == pesoInput) {
