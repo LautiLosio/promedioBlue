@@ -41,6 +41,29 @@ function initChart() {
   }
 }
 
+// Update a container's inner icon using Lucide's runtime icons
+function setLucideIcon(containerEl, iconName) {
+  if (!containerEl || !iconName) return;
+  try {
+    if (window.lucide && lucide.icons && lucide.icons[iconName]) {
+      containerEl.innerHTML = lucide.icons[iconName].toSvg();
+      return;
+    }
+  } catch (e) {
+    // Fallback to attribute update below
+  }
+  // Fallback: update data-lucide and try to (re)create icons
+  const placeholder = containerEl.querySelector('[data-lucide]');
+  if (placeholder) {
+    placeholder.setAttribute('data-lucide', iconName);
+  }
+  if (window.lucide && typeof lucide.createIcons === 'function') {
+    try {
+      lucide.createIcons();
+    } catch (_) {}
+  }
+}
+
 // Format currency
 function formatCurrency(value) {
   return new Intl.NumberFormat('es-AR', {
@@ -307,6 +330,8 @@ dateForm.addEventListener('submit', async function (e) {
 // Update toggle chart to use current data
 toggleChartType.addEventListener('click', function () {
   isLineChart = !isLineChart;
+  const nextIcon = isLineChart ? 'bar-chart' : 'line-chart';
+  setLucideIcon(toggleChartType, nextIcon);
   if (chart && currentDisplayData.length > 0) {
     createChart(currentDisplayData);
   }

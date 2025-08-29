@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -52,7 +52,7 @@
               <input type="date" id="dateInput" class="historico-form-control" disabled />
             </div>
             <button type="button" id="useInCalculator" class="historico-btn-secondary">
-              Usar esta cotización en la calculadora
+              <i data-lucide="calculator"></i>
             </button>
             <button type="submit" id="submitButton" class="historico-btn-primary" disabled>Buscar</button>
           </form>
@@ -74,8 +74,12 @@
             <div class="historico-chart-header">
               <h2>Evolución del Precio</h2>
               <div class="historico-chart-controls">
-                <button id="toggleChartType" class="historico-btn-icon">📊</button>
-                <button id="downloadData" class="historico-btn-icon">📥</button>
+                <button id="toggleChartType" class="historico-btn-icon">
+                  <i id="toggleChartTypeIcon" data-lucide="bar-chart"></i>
+                </button>
+                <button id="downloadData" class="historico-btn-icon">
+                  <i id="downloadDataIcon" data-lucide="download"></i>
+                </button>
               </div>
             </div>
             <div id="chart"></div>
@@ -110,6 +114,10 @@
       <button onclick="window.history.back()">💸 Volver</button>
     </div>
 
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="historico.js"></script>
   </body>
