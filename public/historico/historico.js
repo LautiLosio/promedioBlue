@@ -270,7 +270,6 @@ dolarType.addEventListener('change', async function () {
 
   dateInput.disabled = true;
   dateInput.value = '';
-  dateInput.type = 'text';
   dateInput.placeholder = 'Cargando...';
 
   const data = await fetchHistoricalData(selectedCasa);
@@ -279,9 +278,16 @@ dolarType.addEventListener('change', async function () {
     const oldestDate = new Date(data[0].fecha);
     const newestDate = new Date(data[data.length - 1].fecha);
 
-    dateInput.type = 'date';
-    dateInput.min = oldestDate.toISOString().split('T')[0];
-    dateInput.max = newestDate.toISOString().split('T')[0];
+    // Use local time to avoid timezone shift issues on mobile
+    function formatDateForInput(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    dateInput.min = formatDateForInput(oldestDate);
+    dateInput.max = formatDateForInput(newestDate);
     dateInput.disabled = false;
 
     // Update UI with last month's data by default
@@ -432,9 +438,15 @@ async function main() {
     const oldestDate = new Date(data[0].fecha);
     const newestDate = new Date(data[data.length - 1].fecha);
 
-    dateInput.type = 'date';
-    dateInput.min = oldestDate.toISOString().split('T')[0];
-    dateInput.max = newestDate.toISOString().split('T')[0];
+    function formatDateForInput(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    dateInput.min = formatDateForInput(oldestDate);
+    dateInput.max = formatDateForInput(newestDate);
     dateInput.disabled = false;
   }
 }

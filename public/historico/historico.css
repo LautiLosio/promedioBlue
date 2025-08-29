@@ -203,8 +203,8 @@
   padding-top: 0;
   padding-bottom: 0;
   border-width: 0;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: width;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: all;
 }
 
 #useInCalculator.show {
