@@ -10,6 +10,18 @@ const volverButton = document.querySelector('.back-button');
 const SCROLL_THRESHOLD = 50;
 const SCROLL_TIMEOUT = 1500;
 
+function formatARS(value) {
+  const numeric = typeof value === 'number' ? value : parseFloat(value);
+  if (Number.isNaN(numeric)) {
+    return 'No disponible';
+  }
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    maximumFractionDigits: 2,
+  }).format(numeric);
+}
+
 function createPlaceholders() {
   placeholders = []; // Clear any existing placeholders
   for (let i = 0; i < 9; i++) {
@@ -182,7 +194,7 @@ function createCompraVentaElement(displayText, value, casa) {
   }
 
   let element = document.createElement('h2');
-  element.innerHTML = `${displayText.charAt(0).toUpperCase() + displayText.slice(1)}: ${value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || value}`;
+  element.innerHTML = `${displayText.charAt(0).toUpperCase() + displayText.slice(1)}: ${formatARS(value)}`;
   element.classList.add('compra-venta');
   element.id = `${displayText}-${casa}`;
 
@@ -198,7 +210,7 @@ function createValueContainerElement() {
 
 function createValueElement(value) {
   let element = document.createElement('h3');
-  element.innerHTML = `$ ${value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}`;
+  element.innerHTML = `${formatARS(value)}`;
 
   return element;
 }
