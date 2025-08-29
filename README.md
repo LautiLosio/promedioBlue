@@ -8,11 +8,11 @@
 
 Una app simple y rápida para consultar el valor del dólar blue en Argentina, ver otras cotizaciones, calcular conversiones y explorar el histórico de precios.
 
-Web: <a href="https://promedioblue.web.app">promedioblue.web.app</a>
+Web: <a href="https://promedioblue.web.app" target="_blank">promedioblue.web.app</a>
 
 ## Características
 
-- Cotización del dólar blue y otros tipos de cambio en tiempo real gracias a <a href="https://dolarapi.com/">dolarapi.com</a>
+- Cotización del dólar blue y otros tipos de cambio en tiempo real gracias a <a href="https://dolarapi.com/" target="_blank">dolarapi.com</a>
 - Calculadora de conversión entre monedas extranjeras y pesos argentinos
 - Histórico de precios con gráficos interactivos y estadísticas
 
@@ -31,7 +31,7 @@ Web: <a href="https://promedioblue.web.app">promedioblue.web.app</a>
   - Dólar API: `https://dolarapi.com/v1/dolares/`
   - Gráficos: ECharts
   - UI/UX: SweetAlert2, Lucide Icons
-  - Donaciones: <a href="https://cafecito.app/losio">Cafecito</a>
+  - Donaciones: <a href="https://cafecito.app/losio" target="_blank">Cafecito</a>
 
 ## Ejecutar localmente
 
