@@ -41,25 +41,27 @@
           </div>
 
           <form id="dateForm" class="historico-search-form">
-            <div class="historico-form-group">
+            <div class="historico-input-group">
               <label for="dolarType">Tipo de Dólar</label>
               <select id="dolarType" class="historico-form-control" required>
                 <option value="" disabled>Seleccionar tipo...</option>
               </select>
             </div>
-            <div class="historico-form-group">
+            <div class="historico-input-group">
               <label for="dateInput">Fecha</label>
               <input type="date" id="dateInput" class="historico-form-control" disabled />
             </div>
-            <button type="button" id="useInCalculator" class="historico-btn-secondary">
-              <i data-lucide="calculator"></i>
-            </button>
-            <button type="submit" id="submitButton" class="historico-btn-primary" disabled>Buscar</button>
+            <div class="historico-search-buttons-group">
+              <button type="submit" id="submitButton" class="historico-btn-primary" disabled>Buscar</button>
+              <button type="button" id="useInCalculator" class="historico-btn-secondary">
+                <i data-lucide="calculator"></i>
+              </button>
+            </div>
           </form>
         </div>
 
         <div class="historico-chart-section">
-          <div class="historico-form-group">
+          <div class="historico-input-group">
             <label class="historico-form-label" for="rangeInput">Rango de días</label>
             <select id="rangeInput" class="historico-form-control">
               <option value="7">Una semana</option>

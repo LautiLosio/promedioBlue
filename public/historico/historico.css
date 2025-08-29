@@ -84,16 +84,40 @@
 }
 
 /* Form Controls */
-.historico-form-group {
+.historico-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.historico-search-buttons-group {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
+
+.historico-input-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.historico-form-group label {
+.historico-input-group label {
   font-weight: 500;
   color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.historico-input-group select,
+.historico-input-group input {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-color-light);
+  border: 1px solid var(--primary-color-dark);
+  color: white;
+  border-radius: 10px;
   font-size: 1.1rem;
 }
 
@@ -132,6 +156,7 @@
 
 .historico-btn-primary,
 .historico-btn-secondary {
+  width: 100%;
   background: var(--primary-color);
   color: var(--bg-color);
   border: 1px solid var(--primary-color-dark);
@@ -145,7 +170,7 @@
 
 .historico-btn-primary:hover:not(:disabled),
 .historico-btn-secondary:hover:not(:disabled) {
-  background: hsla(97, 50%, 87%, 0.25);
+  background: var(--primary-color-hover);
   transform: translateY(-1px);
 }
 
@@ -168,9 +193,8 @@
 /* Use in calculator button width animation */
 #useInCalculator {
   display: block;
-  height: 0;
-  width: 100%;
-  opacity: 0;
+  width: 0;
+  height: 56px;
   overflow: hidden;
   white-space: nowrap;
   pointer-events: none;
@@ -179,16 +203,12 @@
   padding-top: 0;
   padding-bottom: 0;
   border-width: 0;
-  transition:
-    width 0.25s ease,
-    padding 0.25s ease,
-    border-width 0.25s ease,
-    opacity 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #useInCalculator.show {
-  margin-bottom: 1rem;
-  height: 100%;
+  margin-left: 0.5rem;
+  width: 33%;
   opacity: 1;
   pointer-events: auto;
   padding: 1rem;
