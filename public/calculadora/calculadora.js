@@ -12,7 +12,6 @@ let rateRight = document.getElementById('rateRight');
 let historicoNotice = document.getElementById('historicoNotice');
 let historicoNoticeCasa = document.getElementById('historicoNoticeCasa');
 let historicoNoticeFecha = document.getElementById('historicoNoticeFecha');
-let changeFromHistoricoBtn = document.getElementById('changeFromHistorico');
 
 let cotizaciones = {};
 let selectedDolarValue;
@@ -107,11 +106,6 @@ function initHistoricoMode(selection) {
       historicoNoticeFecha.textContent = selection.fecha;
     }
     historicoNotice.classList.remove('hidden');
-  }
-  if (changeFromHistoricoBtn) {
-    changeFromHistoricoBtn.addEventListener('click', () => {
-      window.location.href = '../historico/historico.html';
-    });
   }
   updateFromLabel();
   updateRateDisplay();
