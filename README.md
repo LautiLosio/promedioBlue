@@ -16,11 +16,13 @@ Una app simple y rápida para consultar el valor del dólar blue en Argentina, v
 
 ## Capturas de pantalla
 
-![Banner de la app](public/share_banner.png)
-![Pantalla de inicio](docs/screenshots/home.png)
-![Cotizaciones](docs/screenshots/cotizaciones.png)
-![Calculadora](docs/screenshots/calculadora.png)
-![Histórico](docs/screenshots/historico.png)
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+  <img src="public/share_banner.png" alt="Banner de la app" style="width: 100%;">
+  <img src="docs/screenshots/home.png" alt="Pantalla de inicio" style="width: 100%;">
+  <img src="docs/screenshots/cotizaciones.png" alt="Cotizaciones" style="width: 100%;">
+  <img src="docs/screenshots/calculadora.png" alt="Calculadora" style="width: 100%;">
+  <img src="docs/screenshots/historico.png" alt="Histórico" style="width: 100%;">
+</div>
 
 ---
 
