@@ -4,27 +4,11 @@
 [![Firebase Hosting](https://img.shields.io/badge/hosting-firebase-ffca28?logo=firebase&logoColor=000)](https://firebase.google.com/products/hosting)
 [![PWA Ready](https://img.shields.io/badge/pwa-ready-5a0fc8)](./public/manifest.json)
 
+![Pantalla de inicio](docs/screenshots/home.png)
+
 Una app simple y rápida para consultar el valor del dólar blue en Argentina, ver otras cotizaciones, calcular conversiones y explorar el histórico de precios.
 
----
-
-## Demo
-
-- Web: `https://promedioblue.web.app`
-
----
-
-## Capturas de pantalla
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center">
-  <img src="public/share_banner.png" width="24%" alt="Banner de la app" />
-  <img src="docs/screenshots/home.png" width="24%" alt="Pantalla de inicio" />
-  <img src="docs/screenshots/cotizaciones.png" width="24%" alt="Cotizaciones" />
-  <img src="docs/screenshots/calculadora.png" width="24%" alt="Calculadora" />
-  <img src="docs/screenshots/historico.png" width="24%" alt="Histórico" />
-</div>
-
----
+Web: <a href="https://promedioblue.web.app">promedioblue.web.app</a>
 
 ## Características
 
@@ -32,16 +16,12 @@ Una app simple y rápida para consultar el valor del dólar blue en Argentina, v
 - Calculadora de conversión entre monedas extranjeras y pesos argentinos
 - Histórico de precios con gráficos interactivos y estadísticas
 
----
-
 ## Páginas principales
 
 - Inicio: `public/index.html`
 - Cotizaciones: `public/cotizaciones/cotizaciones.html`
 - Calculadora: `public/calculadora/calculadora.html`
 - Histórico: `public/historico/historico.html`
-
----
 
 ## Tecnologías y servicios
 
@@ -52,8 +32,6 @@ Una app simple y rápida para consultar el valor del dólar blue en Argentina, v
   - Gráficos: ECharts
   - UI/UX: SweetAlert2, Lucide Icons
   - Donaciones: <a href="https://cafecito.app/losio">Cafecito</a>
-
----
 
 ## Ejecutar localmente
 
@@ -83,8 +61,6 @@ firebase login
 firebase emulators:start --only hosting
 ```
 
----
-
 ## Despliegue
 
 Firebase Hosting (recomendado)
@@ -102,8 +78,6 @@ GitHub Pages (alternativa)
 - Publicá el contenido de `public/` en la rama `gh-pages` o configurá Pages para servir desde `/public`.
 - Actualizá los paths si tu base path cambia.
 
----
-
 ## Estructura del proyecto
 
 ```
@@ -118,14 +92,10 @@ public/
 
 No hay paso de build: es un sitio estático listo para servir.
 
----
-
 ## Configuración
 
 - No se requieren claves de API para `dolarapi.com` (endpoint público usado por `public/main.js`).
 - Ajustá metadatos Open Graph/Twitter en `public/index.html` si cambiás dominios o recursos.
-
----
 
 ## Contribuir
 
@@ -134,8 +104,6 @@ No hay paso de build: es un sitio estático listo para servir.
 3. Commit: `git commit -m "feat: agrego <tu mejora>"`
 4. Push: `git push origin feature/mi-mejora`
 5. Abrí un Pull Request y te lo reviso
-
----
 
 ## Agradecimientos
 
