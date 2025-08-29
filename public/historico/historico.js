@@ -45,7 +45,7 @@ function initChart() {
 function formatCurrency(value) {
   return new Intl.NumberFormat('es-AR', {
     style: 'currency',
-    currency: 'ARS'
+    currency: 'ARS',
   }).format(value);
 }
 
@@ -54,7 +54,7 @@ function formatDate(date) {
   return new Intl.DateTimeFormat('es-AR', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   }).format(new Date(date));
 }
 
@@ -75,62 +75,62 @@ function calculateStats(data) {
 // Create chart
 function createChart(data) {
   initChart();
-  
+
   const dates = data.map(d => formatDate(d.fecha));
   const compra = data.map(d => d.compra);
   const venta = data.map(d => d.venta);
-  
+
   const option = {
     tooltip: {
       trigger: 'axis',
-      formatter: function(params) {
+      formatter: function (params) {
         const date = params[0].name;
         return `${date}<br/>
           Compra: ${formatCurrency(params[0].value)}<br/>
           Venta: ${formatCurrency(params[1].value)}`;
-      }
+      },
     },
     legend: {
       data: ['Compra', 'Venta'],
       textStyle: {
-        color: 'hsl(97, 50%, 87%)'
-      }
+        color: 'hsl(97, 50%, 87%)',
+      },
     },
     grid: {
       left: '3%',
       right: '4%',
       bottom: '3%',
-      containLabel: true
+      containLabel: true,
     },
     xAxis: {
       type: 'category',
       data: dates,
       axisLabel: {
         rotate: 45,
-        color: 'hsl(97, 50%, 87%)'
+        color: 'hsl(97, 50%, 87%)',
       },
       axisLine: {
         lineStyle: {
-          color: 'hsl(97, 50%, 87%)'
-        }
-      }
+          color: 'hsl(97, 50%, 87%)',
+        },
+      },
     },
     yAxis: {
       type: 'value',
       axisLabel: {
         formatter: formatCurrency,
-        color: 'hsl(97, 50%, 87%)'
+        color: 'hsl(97, 50%, 87%)',
       },
       axisLine: {
         lineStyle: {
-          color: 'hsl(97, 50%, 87%)'
-        }
+          color: 'hsl(97, 50%, 87%)',
+        },
       },
       splitLine: {
         lineStyle: {
-          color: 'hsla(97, 50%, 87%, 0.1)'
-        }
-      }
+          color: 'hsla(97, 50%, 87%, 0.1)',
+        },
+      },
     },
     series: [
       {
@@ -139,14 +139,16 @@ function createChart(data) {
         type: isLineChart ? 'line' : 'bar',
         smooth: isLineChart,
         itemStyle: {
-          color: '#88bd66'
+          color: '#88bd66',
         },
-        areaStyle: isLineChart ? {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(136, 189, 102, 0.3)' },
-            { offset: 1, color: 'rgba(136, 189, 102, 0.1)' }
-          ])
-        } : undefined
+        areaStyle: isLineChart
+          ? {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(136, 189, 102, 0.3)' },
+                { offset: 1, color: 'rgba(136, 189, 102, 0.1)' },
+              ]),
+            }
+          : undefined,
       },
       {
         name: 'Venta',
@@ -154,16 +156,18 @@ function createChart(data) {
         type: isLineChart ? 'line' : 'bar',
         smooth: isLineChart,
         itemStyle: {
-          color: '#3e6029'
+          color: '#3e6029',
         },
-        areaStyle: isLineChart ? {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(62, 96, 41, 0.3)' },
-            { offset: 1, color: 'rgba(62, 96, 41, 0.1)' }
-          ])
-        } : undefined
-      }
-    ]
+        areaStyle: isLineChart
+          ? {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(62, 96, 41, 0.3)' },
+                { offset: 1, color: 'rgba(62, 96, 41, 0.1)' },
+              ]),
+            }
+          : undefined,
+      },
+    ],
   };
 
   chart.setOption(option);
@@ -174,12 +178,7 @@ function downloadCSV(data) {
   const headers = ['Fecha', 'Compra', 'Venta', 'Promedio'];
   const csvContent = [
     headers.join(','),
-    ...data.map(d => [
-      d.fecha,
-      d.compra,
-      d.venta,
-      (d.compra + d.venta) / 2
-    ].join(','))
+    ...data.map(d => [d.fecha, d.compra, d.venta, (d.compra + d.venta) / 2].join(',')),
   ].join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -234,7 +233,7 @@ function filterDataByRange(data, range, referenceDate = new Date()) {
   const endDate = referenceDate;
   const startDate = new Date(referenceDate);
   startDate.setDate(startDate.getDate() - range);
-  
+
   return data.filter(d => {
     const date = new Date(d.fecha);
     return date >= startDate && date <= endDate;
@@ -242,10 +241,10 @@ function filterDataByRange(data, range, referenceDate = new Date()) {
 }
 
 // Event listeners
-dolarType.addEventListener('change', async function() {
+dolarType.addEventListener('change', async function () {
   selectedCasa = dolarType.value;
   if (!selectedCasa) return;
-  
+
   dateInput.disabled = true;
   dateInput.value = '';
   dateInput.type = 'text';
@@ -268,14 +267,14 @@ dolarType.addEventListener('change', async function() {
   }
 });
 
-dateInput.addEventListener('change', function() {
+dateInput.addEventListener('change', function () {
   submitButton.disabled = !dateInput.value;
 });
 
 // Separate range input handler
-rangeInput.addEventListener('change', function() {
+rangeInput.addEventListener('change', function () {
   if (!selectedCasa) return;
-  
+
   const range = parseInt(rangeInput.value);
   const referenceDate = dateInput.value ? new Date(dateInput.value) : new Date();
   const filteredData = filterDataByRange(cotizaciones, range, referenceDate);
@@ -283,21 +282,21 @@ rangeInput.addEventListener('change', function() {
 });
 
 // Update form submit to not handle range
-dateForm.addEventListener('submit', async function(e) {
+dateForm.addEventListener('submit', async function (e) {
   e.preventDefault();
-  
+
   if (!dateInput.value) return;
-  
+
   const selectedDate = new Date(dateInput.value);
   const range = parseInt(rangeInput.value);
   const startDate = new Date(selectedDate);
   startDate.setDate(startDate.getDate() - range);
-  
+
   const filteredData = cotizaciones.filter(d => {
     const date = new Date(d.fecha);
     return date >= startDate && date <= selectedDate;
   });
-  
+
   updateUI(filteredData);
   // Reveal the "Use in Calculator" button after a specific search
   if (useInCalculator && filteredData.length > 0) {
@@ -306,14 +305,14 @@ dateForm.addEventListener('submit', async function(e) {
 });
 
 // Update toggle chart to use current data
-toggleChartType.addEventListener('click', function() {
+toggleChartType.addEventListener('click', function () {
   isLineChart = !isLineChart;
   if (chart && currentDisplayData.length > 0) {
     createChart(currentDisplayData);
   }
 });
 
-downloadData.addEventListener('click', function() {
+downloadData.addEventListener('click', function () {
   if (cotizaciones.length > 0) {
     downloadCSV(cotizaciones);
   }
@@ -321,7 +320,7 @@ downloadData.addEventListener('click', function() {
 
 // Send selected quotation to calculator
 if (useInCalculator) {
-  useInCalculator.addEventListener('click', function() {
+  useInCalculator.addEventListener('click', function () {
     if (!currentDisplayData || currentDisplayData.length === 0) return;
     const last = currentDisplayData[currentDisplayData.length - 1];
     const selection = {
@@ -330,7 +329,7 @@ if (useInCalculator) {
       fecha: last.fecha,
       compra: last.compra,
       venta: last.venta,
-      promedio: (last.compra + last.venta) / 2
+      promedio: (last.compra + last.venta) / 2,
     };
     try {
       sessionStorage.setItem('historicoSelection', JSON.stringify(selection));
@@ -346,15 +345,15 @@ function handleScroll() {
   const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
-  
+
   // Show button at the top, bottom, or when scrolling up
-  if (currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10 || currentScroll < lastScrollTop) {
+  if (currentScroll < 10 || windowHeight + currentScroll >= documentHeight - 10 || currentScroll < lastScrollTop) {
     volverButton.classList.add('visible');
     clearTimeout(scrollTimeout);
   } else {
     volverButton.classList.remove('visible');
   }
-  
+
   lastScrollTop = currentScroll;
 }
 
@@ -366,7 +365,7 @@ window.addEventListener('resize', handleScroll, { passive: true });
 handleScroll();
 
 // Show button on mouse movement near bottom
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', e => {
   const bottomThreshold = window.innerHeight - 50;
   if (e.clientY > bottomThreshold && window.pageYOffset > SCROLL_THRESHOLD) {
     volverButton.classList.add('visible');
@@ -387,27 +386,27 @@ async function main() {
     const name = casa.charAt(0).toUpperCase() + casa.slice(1);
     return `<option value="${casa}">Dólar ${name}</option>`;
   });
-  
+
   dolarType.innerHTML = options.join('');
-  
+
   // Set default range to 1 month
   rangeInput.value = '30';
-  
+
   // Set initial data for blue dollar
   selectedCasa = 'blue';
   dolarType.value = selectedCasa;
-  
+
   // Initial visibility handled by handleScroll()
-  
+
   const data = await fetchHistoricalData(selectedCasa);
   if (data.length > 0) {
     cotizaciones = data;
     const filteredData = filterDataByRange(data, 30);
     updateUI(filteredData);
-    
+
     const oldestDate = new Date(data[0].fecha);
     const newestDate = new Date(data[data.length - 1].fecha);
-    
+
     dateInput.type = 'date';
     dateInput.min = oldestDate.toISOString().split('T')[0];
     dateInput.max = newestDate.toISOString().split('T')[0];

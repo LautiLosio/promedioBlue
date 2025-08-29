@@ -1,108 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Dolar</title>
-  <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
-  <link rel="stylesheet" href="../utilities.css"/>
-  <link rel="stylesheet" href="../style.css"/>
-  <link rel="stylesheet" href="calculadora.css">
-</head>
-<body>
-  <div class="calculator-page">
-    <h1 class="page-title">Calculadora</h1>
-    
-    <div class="calculator-layout">
-      <!-- Conversion Box -->
-      <div class="calculator-section">
-        <div class="conversion-group">
-          <!-- From Currency Input -->
-          <div class="form-group">
-            <label class="form-label" for="fromInput">Monto</label>
-            <div class="input-group">
-              <div class="input-group-wrapper">
-                <span class="currency-symbol">$</span>
-                <input 
-                  id="fromInput" 
-                  name="from"
-                  class="form-control form-control-numeric"
-                  inputmode="numeric"
-                  placeholder="0,00">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora Dolar</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+    <link rel="stylesheet" href="../utilities.css" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="calculadora.css" />
+  </head>
+  <body>
+    <div class="calculator-page">
+      <h1 class="page-title">Calculadora</h1>
+
+      <div class="calculator-layout">
+        <!-- Conversion Box -->
+        <div class="calculator-section">
+          <div class="conversion-group">
+            <!-- From Currency Input -->
+            <div class="form-group">
+              <label class="form-label" for="fromInput">Monto</label>
+              <div class="input-group">
+                <div class="input-group-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="fromInput"
+                    name="from"
+                    class="form-control form-control-numeric"
+                    inputmode="numeric"
+                    placeholder="0,00" />
+                </div>
+              </div>
+            </div>
+
+            <div class="conversion-arrow">
+              <span id="rateLeft" class="rate-display-left"></span>
+              <span class="arrow-symbol">&DownArrow;</span>
+              <span id="rateRight" class="rate-display-right"></span>
+            </div>
+
+            <!-- To Currency Input -->
+            <div class="form-group">
+              <label class="form-label" for="pesoInput">Pesos Argentinos</label>
+              <div class="input-group">
+                <div class="input-group-wrapper">
+                  <span class="currency-symbol">$</span>
+                  <input
+                    id="pesoInput"
+                    name="pesos"
+                    class="form-control form-control-numeric"
+                    inputmode="numeric"
+                    placeholder="0,00" />
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="conversion-arrow">
-            <span id="rateLeft" class="rate-display-left"></span>
-            <span class="arrow-symbol">&DownArrow;</span>
-            <span id="rateRight" class="rate-display-right"></span>
+        <!-- Selectors Box -->
+        <div class="calculator-section">
+          <div id="historicoNotice" class="form-group hidden">
+            <p>
+              <span class="text-primary">Cotización seleccionada</span><br />
+              <span id="historicoNoticeCasa"></span><br />
+              <span id="historicoNoticeFecha"></span>
+            </p>
+            <button onclick="window.history.back()" id="changeFromHistorico" type="button" class="btn-primary">
+              Elegir otra cotización
+            </button>
+          </div>
+          <div class="form-group" id="fromCurrencyGroup">
+            <label class="form-label" for="fromCurrency">Moneda</label>
+            <select name="fromCurrency" id="fromCurrency" class="form-control form-control-select">
+              <option value="USD">Dólar (USD)</option>
+              <option value="EUR">Euro (EUR)</option>
+              <option value="BRL">Real (BRL)</option>
+              <option value="CLP">Peso Chileno (CLP)</option>
+              <option value="UYU">Peso Uruguayo (UYU)</option>
+            </select>
           </div>
 
-          <!-- To Currency Input -->
+          <div id="dolaresSelect" class="form-group">
+            <label class="form-label" for="dolarType">Tipo de dólar</label>
+            <select name="dolares" id="dolarType" class="form-control form-control-select"></select>
+          </div>
+
           <div class="form-group">
-            <label class="form-label" for="pesoInput">Pesos Argentinos</label>
-            <div class="input-group">
-              <div class="input-group-wrapper">
-                <span class="currency-symbol">$</span>
-                <input  
-                  id="pesoInput" 
-                  name="pesos" 
-                  class="form-control form-control-numeric"
-                  inputmode="numeric"
-                  placeholder="0,00">
-              </div>
+            <label class="form-label">Cotización</label>
+            <div id="tipo-precio" class="price-type-selector standalone">
+              <p class="price-type-option">Compra</p>
+              <p class="price-type-option price-type-option-active">Promedio</p>
+              <p class="price-type-option">Venta</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Selectors Box -->
-      <div class="calculator-section">
-        <div id="historicoNotice" class="form-group hidden">
-          <p>
-            <span class="text-primary">Cotización seleccionada</span><br>
-            <span id="historicoNoticeCasa"></span><br>
-            <span id="historicoNoticeFecha"></span>
-          </p>
-          <button id="changeFromHistorico" type="button" class="btn-primary">Elegir otra cotización</button>
-        </div>
-        <div class="form-group" id="fromCurrencyGroup">
-          <label class="form-label" for="fromCurrency">Moneda</label>
-          <select name="fromCurrency" id="fromCurrency" class="form-control form-control-select">
-            <option value="USD">Dólar (USD)</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="BRL">Real (BRL)</option>
-            <option value="CLP">Peso Chileno (CLP)</option>
-            <option value="UYU">Peso Uruguayo (UYU)</option>
-          </select>
-        </div>
-
-        <div id="dolaresSelect" class="form-group">
-          <label class="form-label" for="dolarType">Tipo de dólar</label>
-          <select name="dolares" id="dolarType" class="form-control form-control-select"></select>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Cotización</label>
-          <div id="tipo-precio" class="price-type-selector standalone">
-            <p class="price-type-option">Compra</p>
-            <p class="price-type-option price-type-option-active">Promedio</p>
-            <p class="price-type-option">Venta</p>
-          </div>
-        </div>
+      <div class="back-button visible">
+        <button onclick="window.history.back()" class="btn-primary">💸 Volver</button>
       </div>
     </div>
 
-    <div class="back-button visible">
-      <button onclick="window.history.back()" class="btn-primary">
-        💸 Volver
-      </button>
-    </div>
-  </div>
-
-  <script src="calculadora.js"></script>
-</body>
+    <script src="calculadora.js"></script>
+  </body>
 </html>

@@ -1,102 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dolar Blue</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+    <meta name="apple-mobile-web-app-status-bar" content="#3e6029" />
+    <meta name="theme-color" content="#88bd66" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dolar Blue</title>
-  <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
-  <meta name="apple-mobile-web-app-status-bar" content="#3e6029" />
-  <meta name="theme-color" content="#88bd66" />
+    <!-- open graph -->
+    <meta property="og:image" content="https://lautilosio.github.io/proyectos/dolar/share_banner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="768" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lautilosio.github.io/proyectos/dolar/index.html" />
+    <meta property="og:title" content="Dolar Blue Hoy" />
+    <meta property="og:description" content="Chequea el valor promedio del dolar blue hoy" />
 
-  <!-- open graph -->
-  <meta property="og:image" content="https://lautilosio.github.io/proyectos/dolar/share_banner.png">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1024">
-  <meta property="og:image:height" content="768">
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://lautilosio.github.io/proyectos/dolar/index.html"/>
-  <meta property="og:title" content="Dolar Blue Hoy" />
-  <meta property="og:description" content="Chequea el valor promedio del dolar blue hoy" />
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lauti_losio" />
+    <meta name="twitter:creator" content="@lauti_losio" />
+    <meta name="twitter:title" content="Dolar Blue Hoy" />
+    <meta name="twitter:description" content="Chequea el valor promedio del dolar blue hoy" />
+    <meta name="twitter:image" content="https://lautilosio.github.io/proyectos/dolar/share_banner.png" />
 
-  <!-- twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@lauti_losio">
-  <meta name="twitter:creator" content="@lauti_losio">
-  <meta name="twitter:title" content="Dolar Blue Hoy">
-  <meta name="twitter:description" content="Chequea el valor promedio del dolar blue hoy">
-  <meta name="twitter:image" content="https://lautilosio.github.io/proyectos/dolar/share_banner.png">
-  
-  <!-- Preload critical resources -->
-  <link rel="preload" href="style.css" as="style">
-  <link rel="preload" href="main.js" as="script">
-  
-  <!-- Preconnect to external domains -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="preconnect" href="https://cdn.cafecito.app">
-</head>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="style.css" as="style" />
+    <link rel="preload" href="main.js" as="script" />
 
-<body>
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://cdn.cafecito.app" />
+  </head>
 
-  <span class="index-container">
-    <div class="title">
-      <h1>Dolar Blue Hoy</h1>
-    </div>
-    <div class="box cv">
-      <h3>Compra</h3>
-      <h2 id="compra">Cargando</h2>
-    </div>
-    <div class="box hoy">
-      <h2 id="avg">Cargando</h2>
-    </div>
-    <div class="box cv">
-      <h3>Venta</h3>
-      <h2 id="venta">Cargando</h2>
-    </div>
-    <div class="box">
-      <p class="arrow clickable" id="arrow">&downarrow;</p>
-    </div>
-    <div class="flex date">
-      <p id="ultimaActualizacion">
-        Actualizado: Cargando...
-      </p>
-      <p class="clickable" id="reload">
-        &circlearrowright;
-      </p>
-    </div>
-  </span>
+  <body>
+    <span class="index-container">
+      <div class="title">
+        <h1>Dolar Blue Hoy</h1>
+      </div>
+      <div class="box cv">
+        <h3>Compra</h3>
+        <h2 id="compra">Cargando</h2>
+      </div>
+      <div class="box hoy">
+        <h2 id="avg">Cargando</h2>
+      </div>
+      <div class="box cv">
+        <h3>Venta</h3>
+        <h2 id="venta">Cargando</h2>
+      </div>
+      <div class="box">
+        <p class="arrow clickable" id="arrow">&downarrow;</p>
+      </div>
+      <div class="flex date">
+        <p id="ultimaActualizacion">Actualizado: Cargando...</p>
+        <p class="clickable" id="reload">&circlearrowright;</p>
+      </div>
+    </span>
 
-  <span class="mas-cotizaciones">
+    <span class="mas-cotizaciones">
+      <div class="footer">
+        <p>Hecho con 💚 por <a href="https://github.com/LautiLosio" target="_blank">Lauti</a></p>
+      </div>
 
-    <div class="footer">
-      <p>Hecho con 💚 por <a href="https://github.com/LautiLosio" target="_blank">Lauti</a></p>
-    </div>
-    
-    <div class="buttons">
-      <a class="btn" href="./cotizaciones/cotizaciones.html" target="">
-        Ver más cotizaciones
-      </a>
-      <a class="btn" href="./calculadora/calculadora.html" target="">
-        Calculadora
-      </a>
-      <a class="btn" href="./historico/historico.html" target="">
-        Precio Historico
-      </a>
-    </div>
-    
-    <div class="cafecito">
-      <a href='https://cafecito.app/losio' rel='noopener' target='_blank'><img srcset='https://cdn.cafecito.app/imgs/buttons/button_4.png 1x, https://cdn.cafecito.app/imgs/buttons/button_4_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_4_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_4.png' alt='Invitame un café en cafecito.app' /></a>
-    </div>
-  </span>
+      <div class="buttons">
+        <a class="btn" href="./cotizaciones/cotizaciones.html" target=""> Ver más cotizaciones </a>
+        <a class="btn" href="./calculadora/calculadora.html" target=""> Calculadora </a>
+        <a class="btn" href="./historico/historico.html" target=""> Precio Historico </a>
+      </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="./main.js"></script>
-</body>
+      <div class="cafecito">
+        <a href="https://cafecito.app/losio" rel="noopener" target="_blank"
+          ><img
+            srcset="
+              https://cdn.cafecito.app/imgs/buttons/button_4.png       1x,
+              https://cdn.cafecito.app/imgs/buttons/button_4_2x.png    2x,
+              https://cdn.cafecito.app/imgs/buttons/button_4_3.75x.png 3.75x
+            "
+            src="https://cdn.cafecito.app/imgs/buttons/button_4.png"
+            alt="Invitame un café en cafecito.app"
+        /></a>
+      </div>
+    </span>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./main.js"></script>
+  </body>
 </html>

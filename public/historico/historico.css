@@ -1,4 +1,4 @@
-@import url("../utilities.css");
+@import url('../utilities.css');
 
 .historico-page {
   height: 100%;
@@ -32,7 +32,9 @@
 }
 
 /* Main Sections */
-.historico-price-section, .historico-chart-section, .historico-stats-section {
+.historico-price-section,
+.historico-chart-section,
+.historico-stats-section {
   background: var(--primary-color-light);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -128,7 +130,8 @@
   margin-bottom: 0.5rem;
 }
 
-.historico-btn-primary, .historico-btn-secondary {
+.historico-btn-primary,
+.historico-btn-secondary {
   background: var(--primary-color);
   color: var(--bg-color);
   border: 1px solid var(--primary-color-dark);
@@ -140,12 +143,14 @@
   font-weight: bold;
 }
 
-.historico-btn-primary:hover:not(:disabled), .historico-btn-secondary:hover:not(:disabled) {
+.historico-btn-primary:hover:not(:disabled),
+.historico-btn-secondary:hover:not(:disabled) {
   background: hsla(97, 50%, 87%, 0.25);
   transform: translateY(-1px);
 }
 
-.historico-btn-primary:disabled, .historico-btn-secondary:disabled {
+.historico-btn-primary:disabled,
+.historico-btn-secondary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -174,7 +179,11 @@
   padding-top: 0;
   padding-bottom: 0;
   border-width: 0;
-  transition: width 0.25s ease, padding 0.25s ease, border-width 0.25s ease, opacity 0.2s ease;
+  transition:
+    width 0.25s ease,
+    padding 0.25s ease,
+    border-width 0.25s ease,
+    opacity 0.2s ease;
 }
 
 #useInCalculator.show {
@@ -231,7 +240,7 @@
 .historico-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem
+  gap: 1rem;
 }
 
 .historico-stats-title {
@@ -272,11 +281,11 @@
 }
 
 /* Date input styling */
-input[type="date"] {
+input[type='date'] {
   color-scheme: dark;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
+input[type='date']::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 
@@ -286,7 +295,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     gap: 1.5rem;
   }
 
-  .historico-price-section, .historico-chart-section, .historico-stats-section {
+  .historico-price-section,
+  .historico-chart-section,
+  .historico-stats-section {
     padding: 1.5rem;
   }
 
@@ -431,4 +442,3 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .historico-arrow-symbol-left {
   transform: rotate(180deg);
 }
-

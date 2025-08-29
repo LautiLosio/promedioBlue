@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
-@import url("utilities.css");
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('utilities.css');
 
 * {
   margin: 0;
   padding: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-variant-numeric: tabular-nums;
   box-sizing: border-box;
 }
@@ -52,7 +52,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><text y=%22.9em%22 font-size=%22100%22 opacity=%220.1%22>💸</text></svg>");
+  background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><text y=%22.9em%22 font-size=%22100%22 opacity=%220.1%22>💸</text></svg>');
   background-size: 200px 200px;
   background-position: 0 0;
   z-index: -1;
@@ -155,7 +155,7 @@ body::before {
   }
 }
 
-.mas-cotizaciones { 
+.mas-cotizaciones {
   display: flex;
   flex-direction: column;
   height: 90vh;
@@ -257,7 +257,7 @@ input {
 
 @media screen and (min-width: 850px) {
   body::before {
-    background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 300%22><text y=%22.9em%22 font-size=%22100%22 opacity=%220.1%22>💸</text></svg>");
+    background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 300%22><text y=%22.9em%22 font-size=%22100%22 opacity=%220.1%22>💸</text></svg>');
     background-size: 200px 200px;
     background-position: 0 0;
     animation: bgPan 10s linear infinite;
@@ -428,11 +428,11 @@ input {
   .page-container {
     padding: 1rem;
   }
-  
+
   .card {
     padding: 1.5rem;
   }
-  
+
   .page-title {
     font-size: 2rem;
   }

@@ -1,23 +1,23 @@
-let fromInput = document.getElementById("fromInput");
-let pesoInput = document.getElementById("pesoInput");
-let fromCurrency = document.getElementById("fromCurrency");
-let dolarType = document.getElementById("dolarType");
-let dolaresSelect = document.getElementById("dolaresSelect");
-let fromCurrencyGroup = document.getElementById("fromCurrencyGroup");
-let tipoPrecioElement = document.getElementById("tipo-precio");
-let arrow = document.querySelector(".arrow-symbol");
+let fromInput = document.getElementById('fromInput');
+let pesoInput = document.getElementById('pesoInput');
+let fromCurrency = document.getElementById('fromCurrency');
+let dolarType = document.getElementById('dolarType');
+let dolaresSelect = document.getElementById('dolaresSelect');
+let fromCurrencyGroup = document.getElementById('fromCurrencyGroup');
+let tipoPrecioElement = document.getElementById('tipo-precio');
+let arrow = document.querySelector('.arrow-symbol');
 let fromLabel = document.querySelector('label[for="fromInput"]');
-let rateLeft = document.getElementById("rateLeft");
-let rateRight = document.getElementById("rateRight");
-let historicoNotice = document.getElementById("historicoNotice");
-let historicoNoticeCasa = document.getElementById("historicoNoticeCasa");
-let historicoNoticeFecha = document.getElementById("historicoNoticeFecha");
-let changeFromHistoricoBtn = document.getElementById("changeFromHistorico");
+let rateLeft = document.getElementById('rateLeft');
+let rateRight = document.getElementById('rateRight');
+let historicoNotice = document.getElementById('historicoNotice');
+let historicoNoticeCasa = document.getElementById('historicoNoticeCasa');
+let historicoNoticeFecha = document.getElementById('historicoNoticeFecha');
+let changeFromHistoricoBtn = document.getElementById('changeFromHistorico');
 
 let cotizaciones = {};
 let selectedDolarValue;
 let lastTouchedInput;
-let tipoPrecio = "promedio";
+let tipoPrecio = 'promedio';
 let rates = {};
 
 function resetHistoricoModeUI() {
@@ -60,17 +60,14 @@ function parseNumericOrExpression(raw) {
 
 // Load initial data
 async function loadData() {
-  await Promise.all([
-    getCotizaciones(),
-    getRates()
-  ]);
+  await Promise.all([getCotizaciones(), getRates()]);
 
   // Load dolar options
   cotizaciones.forEach(item => {
-    let option = document.createElement("option");
+    let option = document.createElement('option');
     option.value = item.casa;
     option.textContent = item.casa.slice(0, 1).toUpperCase() + item.casa.slice(1);
-    option.selected = item.casa == "blue" ? true : false;
+    option.selected = item.casa == 'blue' ? true : false;
     dolarType.appendChild(option);
   });
 
@@ -80,7 +77,7 @@ async function loadData() {
 }
 
 function initHistoricoMode(selection) {
-  fromCurrency.value = "USD";
+  fromCurrency.value = 'USD';
   if (selection.casa) {
     dolarType.value = selection.casa;
   }
@@ -88,7 +85,7 @@ function initHistoricoMode(selection) {
     casa: selection.casa,
     compra: selection.compra,
     venta: selection.venta,
-    promedio: selection.promedio
+    promedio: selection.promedio,
   };
   if (fromCurrencyGroup) {
     fromCurrencyGroup.classList.add('hidden');
@@ -101,7 +98,11 @@ function initHistoricoMode(selection) {
   if (historicoNotice && historicoNoticeCasa && historicoNoticeFecha) {
     historicoNoticeCasa.textContent = `Dólar ${selection.casa.charAt(0).toUpperCase() + selection.casa.slice(1)}`;
     try {
-      historicoNoticeFecha.textContent = new Intl.DateTimeFormat('es-AR', { year: 'numeric', month: 'long', day: '2-digit' }).format(new Date(selection.fecha));
+      historicoNoticeFecha.textContent = new Intl.DateTimeFormat('es-AR', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+      }).format(new Date(selection.fecha));
     } catch (e) {
       historicoNoticeFecha.textContent = selection.fecha;
     }
@@ -136,7 +137,7 @@ if (fromHistorico && storedSelectionRaw) {
 }
 
 // Handle bfcache/back-forward restore
-window.addEventListener('pageshow', function() {
+window.addEventListener('pageshow', function () {
   const paramsNow = new URLSearchParams(window.location.search);
   const fromNow = paramsNow.get('from') === 'historico';
   if (!fromNow) {
@@ -147,26 +148,24 @@ window.addEventListener('pageshow', function() {
 
 function updateFromLabel() {
   const currency = fromCurrency.value;
-  if (currency === "USD") {
-    const casaName = selectedDolarValue && selectedDolarValue.casa
-      ? selectedDolarValue.casa
-      : dolarType.value;
+  if (currency === 'USD') {
+    const casaName = selectedDolarValue && selectedDolarValue.casa ? selectedDolarValue.casa : dolarType.value;
     if (casaName) {
       fromLabel.textContent = `Dólar ${casaName.charAt(0).toUpperCase() + casaName.slice(1)}`;
     }
   } else {
     const currencyNames = {
-      "EUR": "Euro",
-      "BRL": "Real",
-      "CLP": "Peso Chileno",
-      "UYU": "Peso Uruguayo"
+      EUR: 'Euro',
+      BRL: 'Real',
+      CLP: 'Peso Chileno',
+      UYU: 'Peso Uruguayo',
     };
     fromLabel.textContent = currencyNames[currency];
   }
 }
 
 function getSelectedRate() {
-  if (fromCurrency.value === "USD") {
+  if (fromCurrency.value === 'USD') {
     return selectedDolarValue ? selectedDolarValue[tipoPrecio] : undefined;
   }
   const selected = rates[fromCurrency.value.toLowerCase()];
@@ -174,21 +173,21 @@ function getSelectedRate() {
 }
 
 function formatSmallCurrency(value) {
-  if (!isFinite(value) || value === 0) return "0";
+  if (!isFinite(value) || value === 0) return '0';
   const abs = Math.abs(value);
   if (abs >= 1) {
-    return abs.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   // Find first non-zero digit after decimal and round to that place
   const asString = abs.toString();
   const match = asString.match(/0\.(0*)(\d)/);
   if (!match) {
-    return abs.toLocaleString("en-US", { maximumFractionDigits: 6 });
+    return abs.toLocaleString('en-US', { maximumFractionDigits: 6 });
   }
   const zeros = match[1].length;
   const decimals = zeros + 1;
   const rounded = Math.round(abs * Math.pow(10, decimals)) / Math.pow(10, decimals);
-  return rounded.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  return rounded.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 }
 
 function updateRateDisplay() {
@@ -208,9 +207,9 @@ function updateRateDisplay() {
 }
 
 // Currency selection change
-fromCurrency.addEventListener("change", function() {
+fromCurrency.addEventListener('change', function () {
   if (historicoMode) return; // locked by historico selection
-  dolaresSelect.style.display = this.value === "USD" ? "flex" : "none";
+  dolaresSelect.style.display = this.value === 'USD' ? 'flex' : 'none';
   updateFromLabel();
   if (lastTouchedInput) {
     calcluateValue(lastTouchedInput, lastTouchedInput == fromInput ? pesoInput : fromInput);
@@ -219,7 +218,7 @@ fromCurrency.addEventListener("change", function() {
 });
 
 // Dolar type change
-dolarType.addEventListener("change", function() {
+dolarType.addEventListener('change', function () {
   if (historicoMode) return; // locked by historico selection
   selectedDolarValue = cotizaciones.find(item => item.casa === dolarType.value);
   updateFromLabel();
@@ -230,7 +229,7 @@ dolarType.addEventListener("change", function() {
 });
 
 // Update price type selection
-tipoPrecioElement.addEventListener("click", function(e) {
+tipoPrecioElement.addEventListener('click', function (e) {
   const option = e.target.closest('.price-type-option');
   if (!option) return;
 
@@ -244,7 +243,7 @@ tipoPrecioElement.addEventListener("click", function(e) {
 
   // Update tipo precio based on text
   const text = option.textContent.toLowerCase();
-  switch(text) {
+  switch (text) {
     case 'compra':
       tipoPrecio = 'compra';
       break;
@@ -266,58 +265,58 @@ tipoPrecioElement.addEventListener("click", function(e) {
 for (let input of [fromInput, pesoInput]) {
   let otherInput = input == fromInput ? pesoInput : fromInput;
 
-  input.addEventListener("focus", function() {
+  input.addEventListener('focus', function () {
     lastTouchedInput = input;
     updateArrowDirection();
     updateRateDisplay();
   });
 
-  input.addEventListener("input", function() {
+  input.addEventListener('input', function () {
     calcluateValue(input, otherInput);
     updateArrowDirection();
     updateRateDisplay();
   });
 
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
+  input.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
       event.preventDefault();
       input.blur();
     }
   });
 
-  input.addEventListener("blur", function() {
+  input.addEventListener('blur', function () {
     const leftVal = parseNumericOrExpression(input.value);
     const rightVal = parseNumericOrExpression(otherInput.value);
-    input.value = isFinite(leftVal) ? formatNumber(leftVal) : "";
-    otherInput.value = isFinite(rightVal) ? formatNumber(rightVal) : "";
+    input.value = isFinite(leftVal) ? formatNumber(leftVal) : '';
+    otherInput.value = isFinite(rightVal) ? formatNumber(rightVal) : '';
 
-    if (input.value == "") {
-      otherInput.value = "";
+    if (input.value == '') {
+      otherInput.value = '';
     }
   });
 }
 
 function calcluateValue(touchedInput, otherInput) {
-  if (touchedInput.value == "") {
-    otherInput.value = "";
+  if (touchedInput.value == '') {
+    otherInput.value = '';
     return;
   }
 
   let value = parseNumericOrExpression(touchedInput.value);
   if (!isFinite(value)) {
-    otherInput.value = "";
+    otherInput.value = '';
     return;
   }
   let result;
 
   if (touchedInput == pesoInput) {
-    if (fromCurrency.value === "USD") {
+    if (fromCurrency.value === 'USD') {
       result = value / selectedDolarValue[tipoPrecio];
     } else {
       result = value / rates[fromCurrency.value.toLowerCase()].venta;
     }
   } else {
-    if (fromCurrency.value === "USD") {
+    if (fromCurrency.value === 'USD') {
       result = value * selectedDolarValue[tipoPrecio];
     } else {
       result = value * rates[fromCurrency.value.toLowerCase()].venta;
@@ -328,7 +327,7 @@ function calcluateValue(touchedInput, otherInput) {
 }
 
 async function getCotizaciones() {
-  let response = await fetch("https://dolarapi.com/v1/dolares");
+  let response = await fetch('https://dolarapi.com/v1/dolares');
   let data = await response.json();
 
   data.forEach(item => {
@@ -340,21 +339,21 @@ async function getCotizaciones() {
 
 async function getRates() {
   const currencies = ['eur', 'brl', 'clp', 'uyu'];
-  const promises = currencies.map(currency => 
+  const promises = currencies.map(currency =>
     fetch(`https://dolarapi.com/v1/cotizaciones/${currency}`)
       .then(response => response.json())
       .then(data => {
         rates[currency] = data;
-      })
+      }),
   );
-  
+
   await Promise.all(promises);
 }
 
 function formatNumber(number) {
-  return number.toLocaleString("es-AR", {
+  return number.toLocaleString('es-AR', {
     maximumFractionDigits: 2,
-    minimumFractionDigits: 2
+    minimumFractionDigits: 2,
   });
 }
 
@@ -369,15 +368,15 @@ function handleScroll() {
   const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
-  
+
   // Show button at the top, bottom, or when scrolling up
-  if (currentScroll < 10 || (windowHeight + currentScroll) >= documentHeight - 10 || currentScroll < lastScrollTop) {
+  if (currentScroll < 10 || windowHeight + currentScroll >= documentHeight - 10 || currentScroll < lastScrollTop) {
     volverButton.classList.add('visible');
     clearTimeout(scrollTimeout);
   } else {
     volverButton.classList.remove('visible');
   }
-  
+
   lastScrollTop = currentScroll;
 }
 
@@ -385,7 +384,7 @@ window.addEventListener('scroll', handleScroll, { passive: true });
 window.addEventListener('resize', handleScroll, { passive: true });
 handleScroll();
 
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', e => {
   const bottomThreshold = window.innerHeight - 50;
   if (e.clientY > bottomThreshold && window.pageYOffset > SCROLL_THRESHOLD) {
     volverButton.classList.add('visible');
@@ -400,12 +399,10 @@ document.addEventListener('mousemove', (e) => {
 
 function updateArrowDirection() {
   if (lastTouchedInput === pesoInput) {
-    arrow.classList.add("arrow-symbol-left");
+    arrow.classList.add('arrow-symbol-left');
   } else {
-    arrow.classList.remove("arrow-symbol-left");
+    arrow.classList.remove('arrow-symbol-left');
   }
 }
 
 window.addEventListener('resize', updateArrowDirection);
-
-

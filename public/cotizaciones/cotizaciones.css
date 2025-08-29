@@ -1,4 +1,4 @@
-@import url("../utilities.css");
+@import url('../utilities.css');
 
 body {
   padding: 20px;
@@ -54,10 +54,12 @@ nav {
 }
 
 .cotizacion#placeholder {
-  background: linear-gradient(90deg, 
-    var(--primary-color-light) 0%, 
-    var(--primary-color-dark) 50%, 
-    var(--primary-color-light) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--primary-color-light) 0%,
+    var(--primary-color-dark) 50%,
+    var(--primary-color-light) 100%
+  );
   background-size: 200% 100%;
   animation: gradient 2s infinite ease-in-out;
   border: 1px solid var(--primary-color-dark);
@@ -68,10 +70,12 @@ nav {
 
 .cotizacion#placeholder * {
   color: transparent;
-  background: linear-gradient(90deg, 
-    var(--primary-color-light) 0%, 
-    var(--primary-color-dark) 50%, 
-    var(--primary-color-light) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--primary-color-light) 0%,
+    var(--primary-color-dark) 50%,
+    var(--primary-color-light) 100%
+  );
   background-size: 200% 100%;
   animation: gradient 2s infinite ease-in-out;
   border-radius: 5px;
@@ -153,7 +157,7 @@ nav a:hover {
   gap: 1rem;
 }
 
-.value-container { 
+.value-container {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -216,7 +220,7 @@ h3 {
   body {
     padding-top: 2rem;
   }
-  
+
   #lista {
     grid-template-columns: repeat(3, 1fr);
     width: 90%;
@@ -261,7 +265,6 @@ h3 {
   .cotizacion {
     padding: 1.5rem;
   }
-
 
   .precio h4 {
     font-size: 1.3rem;
